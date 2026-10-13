@@ -92,7 +92,7 @@ export function alterSVG({ uid = "alter", state = "idle", label = "" } = {}) {
     <mask id="${u}h" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="200"><rect width="200" height="200" fill="#fff"/><circle cx="${sx}" cy="${sy}" r="${sr}" fill="#000"/></mask>
   </defs>
   <ellipse class="a-shadow" cx="100" cy="186" rx="44" ry="6"/>
-  <g class="a-float"><g class="a-tilt">
+  <g class="a-float"><g class="a-look"><g class="a-tilt">
     ${spark(49, 46, .8, 0)}${spark(37, 62, .4, -1.2)}${spark(170, 156, .5, -.6)}
     <g mask="url(#${u}b)"><g transform="${rot}"><path class="a-ring" d="${band}" clip-path="url(#${u}k)"/></g></g>
     <g class="a-moons" transform="${rot}"><circle class="a-moon" r="6.5" mask="url(#${u}b)"><animateMotion dur="2.4s" repeatCount="indefinite" path="${orbit}"/><animate attributeName="opacity" dur="2.4s" repeatCount="indefinite" calcMode="discrete" values="0;1" keyTimes="0;0.5"/></circle></g>
@@ -107,7 +107,7 @@ export function alterSVG({ uid = "alter", state = "idle", label = "" } = {}) {
     </g>
     <g transform="${rot}"><path class="a-ring" d="${band}" clip-path="url(#${u}f)"/></g>
     <g class="a-moons" transform="${rot}"><circle class="a-moon" r="6.5"><animateMotion dur="2.4s" repeatCount="indefinite" path="${orbit}"/><animate attributeName="opacity" dur="2.4s" repeatCount="indefinite" calcMode="discrete" values="1;0" keyTimes="0;0.5"/></circle></g>
-    <g transform="translate(-9 0)">
+    <g class="a-face"><g transform="translate(-9 0)">
     <g class="a-brow a-brow-l"><path class="a-line" d="${brow}"/></g>
     <g class="a-brow a-brow-r"><path class="a-line" d="${brow}" transform="${MIR}"/></g>
     ${eye("l")}${eye("r")}
@@ -118,9 +118,9 @@ export function alterSVG({ uid = "alter", state = "idle", label = "" } = {}) {
     <g class="a-mouth-slash"><path class="a-sign-out" d="M96 102 88 116"/><path class="a-sign-in" d="M96 102 88 116"/></g>
     <path class="a-mouth-flat a-line" d="M87.5 112.2h9"/>
     <path class="a-mouth-wavy a-line" d="M85 112.6q3.5-3 7 0t7 0"/>
-    </g>
+    </g></g>
     <text class="a-q a-extra" x="130" y="40">?</text>
     <text class="a-zz a-extra" x="124" y="40" font-size="18">z z</text>
-  </g></g>
+  </g></g></g>
 </svg>`;
 }

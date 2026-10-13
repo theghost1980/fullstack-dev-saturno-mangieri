@@ -121,7 +121,9 @@ export default async (req, context) => {
   try { origin = new URL(req.headers.get("origin") || ""); } catch { return json(403, { error: "forbidden" }); }
   if (origin.host !== here.host) return json(403, { error: "forbidden" });
 
-  if (!process.env.OPENROUTER_API_KEY) return json(503, { error: "not_configured" });
+  /* trim(): a space or line break pasted with the key would make every request fail. */
+  const API_KEY = (process.env.OPENROUTER_API_KEY || "").trim();
+  if (!API_KEY) return json(503, { error: "not_configured" });
 
   let body;
   try { body = await req.json(); } catch { return json(400, { error: "bad_request" }); }
@@ -146,7 +148,7 @@ export default async (req, context) => {
   const ask = (plain) => fetch(OPENROUTER_URL, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+      Authorization: `Bearer ${API_KEY}`,
       "Content-Type": "application/json",
       "HTTP-Referer": here.origin,          // optional: identifies the site in the OpenRouter dashboard
       "X-OpenRouter-Title": "Alter",
@@ -171,7 +173,7 @@ export default async (req, context) => {
     }
   } catch (err) {
     console.error("[alter] request failed:", err?.message || err);
-    return json(502, { error: "upstream" });
+    return json(502, { error: "upstream", reason: "request_failed" });
   }
 
   if (!res.ok) {
@@ -179,7 +181,8 @@ export default async (req, context) => {
     const hint = { 401: " (check OPENROUTER_API_KEY)", 402: " (no credits left, or the key reached its credit limit)", 404: ` (model "${MODEL}" not available: check ALTER_MODEL)` }[res.status] || "";
     console.error(`[alter] OpenRouter answered ${res.status}${hint}: ${detail}`);
     if (res.status === 402) return json(429, { error: "limit" });           // out of budget: Alter says it cannot take more questions
-    return json(res.status === 429 || res.status === 503 ? 503 : 502, { error: "upstream" });
+    /* `reason` only says which step failed (never any detail), so a failure can be told apart without opening the logs. */
+    return json(res.status === 429 || res.status === 503 ? 503 : 502, { error: "upstream", reason: `openrouter_${res.status}` });
   }
 
   const data = await res.json().catch(() => null);
@@ -187,7 +190,7 @@ export default async (req, context) => {
   const failure = data?.error || data?.choices?.[0]?.error;
   if (!data || failure) {
     console.error("[alter] OpenRouter error in body:", JSON.stringify(failure || "no JSON").slice(0, 300));
-    return json(502, { error: "upstream" });
+    return json(502, { error: "upstream", reason: "error_in_body" });
   }
   const choice = data.choices?.[0];
   const raw = (typeof choice?.message?.content === "string" ? choice.message.content : "").trim();
@@ -195,7 +198,7 @@ export default async (req, context) => {
   console.log(`[alter] ok model=${data.model} in=${data.usage?.prompt_tokens} out=${data.usage?.completion_tokens}${data.usage?.cost != null ? ` cost=${data.usage.cost}` : ""}`);
   if (!raw) {
     console.error(`[alter] empty answer (finish_reason=${choice?.finish_reason}). If it is "length", the model spent its tokens thinking: use a non-reasoning model or raise MAX_OUTPUT_TOKENS.`);
-    return json(502, { error: "upstream" });
+    return json(502, { error: "upstream", reason: "empty_answer" });
   }
   return json(200, parseReply(raw, k));
 };

@@ -37,7 +37,7 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
   --alter-line:#061f2d; --alter-ring:#e8eef2; --alter-spark:#7fe9dc;
 }
 /* only the animated parts turn around their own centre; parts with an SVG transform are left alone */
-.alter .a-float,.alter .a-tilt,.alter .a-open,.alter .a-eye,.alter .a-brow,.alter .a-mouth-open,.alter .a-px,.alter .a-shadow,.alter .a-q,.alter .a-zz,.alter .a-spark{transform-box:fill-box;transform-origin:center}
+.alter .a-float,.alter .a-look,.alter .a-tilt,.alter .a-open,.alter .a-eye,.alter .a-brow,.alter .a-mouth-open,.alter .a-px,.alter .a-shadow,.alter .a-q,.alter .a-zz,.alter .a-spark{transform-box:fill-box;transform-origin:center}
 .alter .a-ring{fill:var(--alter-ring);fill-rule:evenodd}
 .alter .a-outline{fill:none;stroke:var(--alter-line);stroke-width:2.4;stroke-linecap:round}
 .alter .a-rim{fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;opacity:.55}
@@ -45,6 +45,11 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
 .alter .a-sclera{fill:#fff;stroke:var(--alter-line);stroke-width:1.2}
 .alter .a-sclera-shade{fill:#c6dbe9}
 .alter .a-iris{transform:translate(calc(var(--px,0)*1px),calc(var(--py,0)*1px));transition:transform .12s ease-out}
+/* The face slides and the whole head leans a little toward the pointer. The variables are set by
+   src/scripts/alter.js, which does nothing when the visitor prefers reduced motion. */
+.alter .a-face{transform:translate(calc(var(--fx,0)*1px),calc(var(--fy,0)*1px));transition:transform .18s ease-out}
+.alter .a-look{transform:rotate(calc(var(--tilt,0)*1deg));transition:transform .25s ease-out}
+.alter.is-sleeping .a-face,.alter.is-sleeping .a-look,.alter.is-thinking .a-face,.alter.is-thinking .a-look{transform:none}
 .alter .a-hl{fill:#fff}
 .alter .a-line,.alter .a-lash,.alter .a-lid-low,.alter .a-closed{fill:none;stroke:var(--alter-line);stroke-linecap:round;stroke-linejoin:round}
 .alter .a-line{stroke-width:2.8}
@@ -123,7 +128,7 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
     <mask id="s-idleh" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="200"><rect width="200" height="200" fill="#fff"/><circle cx="88" cy="86" r="58" fill="#000"/></mask>
   </defs>
   <ellipse class="a-shadow" cx="100" cy="186" rx="44" ry="6"/>
-  <g class="a-float"><g class="a-tilt">
+  <g class="a-float"><g class="a-look"><g class="a-tilt">
     <g transform="translate(49 46) scale(0.8)"><path class="a-spark" style="--d:0s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g><g transform="translate(37 62) scale(0.4)"><path class="a-spark" style="--d:-1.2s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g><g transform="translate(170 156) scale(0.5)"><path class="a-spark" style="--d:-0.6s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g>
     <g mask="url(#s-idleb)"><g transform="rotate(-18 100 100)"><path class="a-ring" d="M6 100a94 24 0 1 0 188 0a94 24 0 1 0 -188 0ZM12 97a88 17 0 1 0 176 0a88 17 0 1 0 -176 0Z" clip-path="url(#s-idlek)"/></g></g>
     <g class="a-moons" transform="rotate(-18 100 100)"><circle class="a-moon" r="6.5" mask="url(#s-idleb)"><animateMotion dur="2.4s" repeatCount="indefinite" path="M191 98.5A91 20.5 0 0 1 9 98.5A91 20.5 0 0 1 191 98.5"/><animate attributeName="opacity" dur="2.4s" repeatCount="indefinite" calcMode="discrete" values="0;1" keyTimes="0;0.5"/></circle></g>
@@ -138,7 +143,7 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
     </g>
     <g transform="rotate(-18 100 100)"><path class="a-ring" d="M6 100a94 24 0 1 0 188 0a94 24 0 1 0 -188 0ZM12 97a88 17 0 1 0 176 0a88 17 0 1 0 -176 0Z" clip-path="url(#s-idlef)"/></g>
     <g class="a-moons" transform="rotate(-18 100 100)"><circle class="a-moon" r="6.5"><animateMotion dur="2.4s" repeatCount="indefinite" path="M191 98.5A91 20.5 0 0 1 9 98.5A91 20.5 0 0 1 191 98.5"/><animate attributeName="opacity" dur="2.4s" repeatCount="indefinite" calcMode="discrete" values="1;0" keyTimes="0;0.5"/></circle></g>
-    <g transform="translate(-9 0)">
+    <g class="a-face"><g transform="translate(-9 0)">
     <g class="a-brow a-brow-l"><path class="a-line" d="M62 70.6Q73 66 85.5 73.2"/></g>
     <g class="a-brow a-brow-r"><path class="a-line" d="M62 70.6Q73 66 85.5 73.2" transform="translate(184 0) scale(-1 1)"/></g>
     
@@ -187,10 +192,10 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
     <g class="a-mouth-slash"><path class="a-sign-out" d="M96 102 88 116"/><path class="a-sign-in" d="M96 102 88 116"/></g>
     <path class="a-mouth-flat a-line" d="M87.5 112.2h9"/>
     <path class="a-mouth-wavy a-line" d="M85 112.6q3.5-3 7 0t7 0"/>
-    </g>
+    </g></g>
     <text class="a-q a-extra" x="130" y="40">?</text>
     <text class="a-zz a-extra" x="124" y="40" font-size="18">z z</text>
-  </g></g>
+  </g></g></g>
 </svg><figcaption>idle</figcaption></figure><figure>
 <svg class="alter is-listening" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Alter: listening">
   <defs>
@@ -207,7 +212,7 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
     <mask id="s-listeningh" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="200"><rect width="200" height="200" fill="#fff"/><circle cx="88" cy="86" r="58" fill="#000"/></mask>
   </defs>
   <ellipse class="a-shadow" cx="100" cy="186" rx="44" ry="6"/>
-  <g class="a-float"><g class="a-tilt">
+  <g class="a-float"><g class="a-look"><g class="a-tilt">
     <g transform="translate(49 46) scale(0.8)"><path class="a-spark" style="--d:0s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g><g transform="translate(37 62) scale(0.4)"><path class="a-spark" style="--d:-1.2s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g><g transform="translate(170 156) scale(0.5)"><path class="a-spark" style="--d:-0.6s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g>
     <g mask="url(#s-listeningb)"><g transform="rotate(-18 100 100)"><path class="a-ring" d="M6 100a94 24 0 1 0 188 0a94 24 0 1 0 -188 0ZM12 97a88 17 0 1 0 176 0a88 17 0 1 0 -176 0Z" clip-path="url(#s-listeningk)"/></g></g>
     <g class="a-moons" transform="rotate(-18 100 100)"><circle class="a-moon" r="6.5" mask="url(#s-listeningb)"><animateMotion dur="2.4s" repeatCount="indefinite" path="M191 98.5A91 20.5 0 0 1 9 98.5A91 20.5 0 0 1 191 98.5"/><animate attributeName="opacity" dur="2.4s" repeatCount="indefinite" calcMode="discrete" values="0;1" keyTimes="0;0.5"/></circle></g>
@@ -222,7 +227,7 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
     </g>
     <g transform="rotate(-18 100 100)"><path class="a-ring" d="M6 100a94 24 0 1 0 188 0a94 24 0 1 0 -188 0ZM12 97a88 17 0 1 0 176 0a88 17 0 1 0 -176 0Z" clip-path="url(#s-listeningf)"/></g>
     <g class="a-moons" transform="rotate(-18 100 100)"><circle class="a-moon" r="6.5"><animateMotion dur="2.4s" repeatCount="indefinite" path="M191 98.5A91 20.5 0 0 1 9 98.5A91 20.5 0 0 1 191 98.5"/><animate attributeName="opacity" dur="2.4s" repeatCount="indefinite" calcMode="discrete" values="1;0" keyTimes="0;0.5"/></circle></g>
-    <g transform="translate(-9 0)">
+    <g class="a-face"><g transform="translate(-9 0)">
     <g class="a-brow a-brow-l"><path class="a-line" d="M62 70.6Q73 66 85.5 73.2"/></g>
     <g class="a-brow a-brow-r"><path class="a-line" d="M62 70.6Q73 66 85.5 73.2" transform="translate(184 0) scale(-1 1)"/></g>
     
@@ -271,10 +276,10 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
     <g class="a-mouth-slash"><path class="a-sign-out" d="M96 102 88 116"/><path class="a-sign-in" d="M96 102 88 116"/></g>
     <path class="a-mouth-flat a-line" d="M87.5 112.2h9"/>
     <path class="a-mouth-wavy a-line" d="M85 112.6q3.5-3 7 0t7 0"/>
-    </g>
+    </g></g>
     <text class="a-q a-extra" x="130" y="40">?</text>
     <text class="a-zz a-extra" x="124" y="40" font-size="18">z z</text>
-  </g></g>
+  </g></g></g>
 </svg><figcaption>listening</figcaption></figure><figure>
 <svg class="alter is-thinking" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Alter: thinking">
   <defs>
@@ -291,7 +296,7 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
     <mask id="s-thinkingh" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="200"><rect width="200" height="200" fill="#fff"/><circle cx="88" cy="86" r="58" fill="#000"/></mask>
   </defs>
   <ellipse class="a-shadow" cx="100" cy="186" rx="44" ry="6"/>
-  <g class="a-float"><g class="a-tilt">
+  <g class="a-float"><g class="a-look"><g class="a-tilt">
     <g transform="translate(49 46) scale(0.8)"><path class="a-spark" style="--d:0s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g><g transform="translate(37 62) scale(0.4)"><path class="a-spark" style="--d:-1.2s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g><g transform="translate(170 156) scale(0.5)"><path class="a-spark" style="--d:-0.6s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g>
     <g mask="url(#s-thinkingb)"><g transform="rotate(-18 100 100)"><path class="a-ring" d="M6 100a94 24 0 1 0 188 0a94 24 0 1 0 -188 0ZM12 97a88 17 0 1 0 176 0a88 17 0 1 0 -176 0Z" clip-path="url(#s-thinkingk)"/></g></g>
     <g class="a-moons" transform="rotate(-18 100 100)"><circle class="a-moon" r="6.5" mask="url(#s-thinkingb)"><animateMotion dur="2.4s" repeatCount="indefinite" path="M191 98.5A91 20.5 0 0 1 9 98.5A91 20.5 0 0 1 191 98.5"/><animate attributeName="opacity" dur="2.4s" repeatCount="indefinite" calcMode="discrete" values="0;1" keyTimes="0;0.5"/></circle></g>
@@ -306,7 +311,7 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
     </g>
     <g transform="rotate(-18 100 100)"><path class="a-ring" d="M6 100a94 24 0 1 0 188 0a94 24 0 1 0 -188 0ZM12 97a88 17 0 1 0 176 0a88 17 0 1 0 -176 0Z" clip-path="url(#s-thinkingf)"/></g>
     <g class="a-moons" transform="rotate(-18 100 100)"><circle class="a-moon" r="6.5"><animateMotion dur="2.4s" repeatCount="indefinite" path="M191 98.5A91 20.5 0 0 1 9 98.5A91 20.5 0 0 1 191 98.5"/><animate attributeName="opacity" dur="2.4s" repeatCount="indefinite" calcMode="discrete" values="1;0" keyTimes="0;0.5"/></circle></g>
-    <g transform="translate(-9 0)">
+    <g class="a-face"><g transform="translate(-9 0)">
     <g class="a-brow a-brow-l"><path class="a-line" d="M62 70.6Q73 66 85.5 73.2"/></g>
     <g class="a-brow a-brow-r"><path class="a-line" d="M62 70.6Q73 66 85.5 73.2" transform="translate(184 0) scale(-1 1)"/></g>
     
@@ -355,10 +360,10 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
     <g class="a-mouth-slash"><path class="a-sign-out" d="M96 102 88 116"/><path class="a-sign-in" d="M96 102 88 116"/></g>
     <path class="a-mouth-flat a-line" d="M87.5 112.2h9"/>
     <path class="a-mouth-wavy a-line" d="M85 112.6q3.5-3 7 0t7 0"/>
-    </g>
+    </g></g>
     <text class="a-q a-extra" x="130" y="40">?</text>
     <text class="a-zz a-extra" x="124" y="40" font-size="18">z z</text>
-  </g></g>
+  </g></g></g>
 </svg><figcaption>thinking</figcaption></figure><figure>
 <svg class="alter is-speaking" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Alter: speaking">
   <defs>
@@ -375,7 +380,7 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
     <mask id="s-speakingh" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="200"><rect width="200" height="200" fill="#fff"/><circle cx="88" cy="86" r="58" fill="#000"/></mask>
   </defs>
   <ellipse class="a-shadow" cx="100" cy="186" rx="44" ry="6"/>
-  <g class="a-float"><g class="a-tilt">
+  <g class="a-float"><g class="a-look"><g class="a-tilt">
     <g transform="translate(49 46) scale(0.8)"><path class="a-spark" style="--d:0s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g><g transform="translate(37 62) scale(0.4)"><path class="a-spark" style="--d:-1.2s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g><g transform="translate(170 156) scale(0.5)"><path class="a-spark" style="--d:-0.6s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g>
     <g mask="url(#s-speakingb)"><g transform="rotate(-18 100 100)"><path class="a-ring" d="M6 100a94 24 0 1 0 188 0a94 24 0 1 0 -188 0ZM12 97a88 17 0 1 0 176 0a88 17 0 1 0 -176 0Z" clip-path="url(#s-speakingk)"/></g></g>
     <g class="a-moons" transform="rotate(-18 100 100)"><circle class="a-moon" r="6.5" mask="url(#s-speakingb)"><animateMotion dur="2.4s" repeatCount="indefinite" path="M191 98.5A91 20.5 0 0 1 9 98.5A91 20.5 0 0 1 191 98.5"/><animate attributeName="opacity" dur="2.4s" repeatCount="indefinite" calcMode="discrete" values="0;1" keyTimes="0;0.5"/></circle></g>
@@ -390,7 +395,7 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
     </g>
     <g transform="rotate(-18 100 100)"><path class="a-ring" d="M6 100a94 24 0 1 0 188 0a94 24 0 1 0 -188 0ZM12 97a88 17 0 1 0 176 0a88 17 0 1 0 -176 0Z" clip-path="url(#s-speakingf)"/></g>
     <g class="a-moons" transform="rotate(-18 100 100)"><circle class="a-moon" r="6.5"><animateMotion dur="2.4s" repeatCount="indefinite" path="M191 98.5A91 20.5 0 0 1 9 98.5A91 20.5 0 0 1 191 98.5"/><animate attributeName="opacity" dur="2.4s" repeatCount="indefinite" calcMode="discrete" values="1;0" keyTimes="0;0.5"/></circle></g>
-    <g transform="translate(-9 0)">
+    <g class="a-face"><g transform="translate(-9 0)">
     <g class="a-brow a-brow-l"><path class="a-line" d="M62 70.6Q73 66 85.5 73.2"/></g>
     <g class="a-brow a-brow-r"><path class="a-line" d="M62 70.6Q73 66 85.5 73.2" transform="translate(184 0) scale(-1 1)"/></g>
     
@@ -439,10 +444,10 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
     <g class="a-mouth-slash"><path class="a-sign-out" d="M96 102 88 116"/><path class="a-sign-in" d="M96 102 88 116"/></g>
     <path class="a-mouth-flat a-line" d="M87.5 112.2h9"/>
     <path class="a-mouth-wavy a-line" d="M85 112.6q3.5-3 7 0t7 0"/>
-    </g>
+    </g></g>
     <text class="a-q a-extra" x="130" y="40">?</text>
     <text class="a-zz a-extra" x="124" y="40" font-size="18">z z</text>
-  </g></g>
+  </g></g></g>
 </svg><figcaption>speaking</figcaption></figure><figure>
 <svg class="alter is-happy" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Alter: happy">
   <defs>
@@ -459,7 +464,7 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
     <mask id="s-happyh" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="200"><rect width="200" height="200" fill="#fff"/><circle cx="88" cy="86" r="58" fill="#000"/></mask>
   </defs>
   <ellipse class="a-shadow" cx="100" cy="186" rx="44" ry="6"/>
-  <g class="a-float"><g class="a-tilt">
+  <g class="a-float"><g class="a-look"><g class="a-tilt">
     <g transform="translate(49 46) scale(0.8)"><path class="a-spark" style="--d:0s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g><g transform="translate(37 62) scale(0.4)"><path class="a-spark" style="--d:-1.2s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g><g transform="translate(170 156) scale(0.5)"><path class="a-spark" style="--d:-0.6s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g>
     <g mask="url(#s-happyb)"><g transform="rotate(-18 100 100)"><path class="a-ring" d="M6 100a94 24 0 1 0 188 0a94 24 0 1 0 -188 0ZM12 97a88 17 0 1 0 176 0a88 17 0 1 0 -176 0Z" clip-path="url(#s-happyk)"/></g></g>
     <g class="a-moons" transform="rotate(-18 100 100)"><circle class="a-moon" r="6.5" mask="url(#s-happyb)"><animateMotion dur="2.4s" repeatCount="indefinite" path="M191 98.5A91 20.5 0 0 1 9 98.5A91 20.5 0 0 1 191 98.5"/><animate attributeName="opacity" dur="2.4s" repeatCount="indefinite" calcMode="discrete" values="0;1" keyTimes="0;0.5"/></circle></g>
@@ -474,7 +479,7 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
     </g>
     <g transform="rotate(-18 100 100)"><path class="a-ring" d="M6 100a94 24 0 1 0 188 0a94 24 0 1 0 -188 0ZM12 97a88 17 0 1 0 176 0a88 17 0 1 0 -176 0Z" clip-path="url(#s-happyf)"/></g>
     <g class="a-moons" transform="rotate(-18 100 100)"><circle class="a-moon" r="6.5"><animateMotion dur="2.4s" repeatCount="indefinite" path="M191 98.5A91 20.5 0 0 1 9 98.5A91 20.5 0 0 1 191 98.5"/><animate attributeName="opacity" dur="2.4s" repeatCount="indefinite" calcMode="discrete" values="1;0" keyTimes="0;0.5"/></circle></g>
-    <g transform="translate(-9 0)">
+    <g class="a-face"><g transform="translate(-9 0)">
     <g class="a-brow a-brow-l"><path class="a-line" d="M62 70.6Q73 66 85.5 73.2"/></g>
     <g class="a-brow a-brow-r"><path class="a-line" d="M62 70.6Q73 66 85.5 73.2" transform="translate(184 0) scale(-1 1)"/></g>
     
@@ -523,10 +528,10 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
     <g class="a-mouth-slash"><path class="a-sign-out" d="M96 102 88 116"/><path class="a-sign-in" d="M96 102 88 116"/></g>
     <path class="a-mouth-flat a-line" d="M87.5 112.2h9"/>
     <path class="a-mouth-wavy a-line" d="M85 112.6q3.5-3 7 0t7 0"/>
-    </g>
+    </g></g>
     <text class="a-q a-extra" x="130" y="40">?</text>
     <text class="a-zz a-extra" x="124" y="40" font-size="18">z z</text>
-  </g></g>
+  </g></g></g>
 </svg><figcaption>happy</figcaption></figure><figure>
 <svg class="alter is-unsure" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Alter: unsure">
   <defs>
@@ -543,7 +548,7 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
     <mask id="s-unsureh" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="200"><rect width="200" height="200" fill="#fff"/><circle cx="88" cy="86" r="58" fill="#000"/></mask>
   </defs>
   <ellipse class="a-shadow" cx="100" cy="186" rx="44" ry="6"/>
-  <g class="a-float"><g class="a-tilt">
+  <g class="a-float"><g class="a-look"><g class="a-tilt">
     <g transform="translate(49 46) scale(0.8)"><path class="a-spark" style="--d:0s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g><g transform="translate(37 62) scale(0.4)"><path class="a-spark" style="--d:-1.2s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g><g transform="translate(170 156) scale(0.5)"><path class="a-spark" style="--d:-0.6s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g>
     <g mask="url(#s-unsureb)"><g transform="rotate(-18 100 100)"><path class="a-ring" d="M6 100a94 24 0 1 0 188 0a94 24 0 1 0 -188 0ZM12 97a88 17 0 1 0 176 0a88 17 0 1 0 -176 0Z" clip-path="url(#s-unsurek)"/></g></g>
     <g class="a-moons" transform="rotate(-18 100 100)"><circle class="a-moon" r="6.5" mask="url(#s-unsureb)"><animateMotion dur="2.4s" repeatCount="indefinite" path="M191 98.5A91 20.5 0 0 1 9 98.5A91 20.5 0 0 1 191 98.5"/><animate attributeName="opacity" dur="2.4s" repeatCount="indefinite" calcMode="discrete" values="0;1" keyTimes="0;0.5"/></circle></g>
@@ -558,7 +563,7 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
     </g>
     <g transform="rotate(-18 100 100)"><path class="a-ring" d="M6 100a94 24 0 1 0 188 0a94 24 0 1 0 -188 0ZM12 97a88 17 0 1 0 176 0a88 17 0 1 0 -176 0Z" clip-path="url(#s-unsuref)"/></g>
     <g class="a-moons" transform="rotate(-18 100 100)"><circle class="a-moon" r="6.5"><animateMotion dur="2.4s" repeatCount="indefinite" path="M191 98.5A91 20.5 0 0 1 9 98.5A91 20.5 0 0 1 191 98.5"/><animate attributeName="opacity" dur="2.4s" repeatCount="indefinite" calcMode="discrete" values="1;0" keyTimes="0;0.5"/></circle></g>
-    <g transform="translate(-9 0)">
+    <g class="a-face"><g transform="translate(-9 0)">
     <g class="a-brow a-brow-l"><path class="a-line" d="M62 70.6Q73 66 85.5 73.2"/></g>
     <g class="a-brow a-brow-r"><path class="a-line" d="M62 70.6Q73 66 85.5 73.2" transform="translate(184 0) scale(-1 1)"/></g>
     
@@ -607,10 +612,10 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
     <g class="a-mouth-slash"><path class="a-sign-out" d="M96 102 88 116"/><path class="a-sign-in" d="M96 102 88 116"/></g>
     <path class="a-mouth-flat a-line" d="M87.5 112.2h9"/>
     <path class="a-mouth-wavy a-line" d="M85 112.6q3.5-3 7 0t7 0"/>
-    </g>
+    </g></g>
     <text class="a-q a-extra" x="130" y="40">?</text>
     <text class="a-zz a-extra" x="124" y="40" font-size="18">z z</text>
-  </g></g>
+  </g></g></g>
 </svg><figcaption>unsure</figcaption></figure><figure>
 <svg class="alter is-sleeping" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Alter: sleeping">
   <defs>
@@ -627,7 +632,7 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
     <mask id="s-sleepingh" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="200"><rect width="200" height="200" fill="#fff"/><circle cx="88" cy="86" r="58" fill="#000"/></mask>
   </defs>
   <ellipse class="a-shadow" cx="100" cy="186" rx="44" ry="6"/>
-  <g class="a-float"><g class="a-tilt">
+  <g class="a-float"><g class="a-look"><g class="a-tilt">
     <g transform="translate(49 46) scale(0.8)"><path class="a-spark" style="--d:0s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g><g transform="translate(37 62) scale(0.4)"><path class="a-spark" style="--d:-1.2s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g><g transform="translate(170 156) scale(0.5)"><path class="a-spark" style="--d:-0.6s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g>
     <g mask="url(#s-sleepingb)"><g transform="rotate(-18 100 100)"><path class="a-ring" d="M6 100a94 24 0 1 0 188 0a94 24 0 1 0 -188 0ZM12 97a88 17 0 1 0 176 0a88 17 0 1 0 -176 0Z" clip-path="url(#s-sleepingk)"/></g></g>
     <g class="a-moons" transform="rotate(-18 100 100)"><circle class="a-moon" r="6.5" mask="url(#s-sleepingb)"><animateMotion dur="2.4s" repeatCount="indefinite" path="M191 98.5A91 20.5 0 0 1 9 98.5A91 20.5 0 0 1 191 98.5"/><animate attributeName="opacity" dur="2.4s" repeatCount="indefinite" calcMode="discrete" values="0;1" keyTimes="0;0.5"/></circle></g>
@@ -642,7 +647,7 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
     </g>
     <g transform="rotate(-18 100 100)"><path class="a-ring" d="M6 100a94 24 0 1 0 188 0a94 24 0 1 0 -188 0ZM12 97a88 17 0 1 0 176 0a88 17 0 1 0 -176 0Z" clip-path="url(#s-sleepingf)"/></g>
     <g class="a-moons" transform="rotate(-18 100 100)"><circle class="a-moon" r="6.5"><animateMotion dur="2.4s" repeatCount="indefinite" path="M191 98.5A91 20.5 0 0 1 9 98.5A91 20.5 0 0 1 191 98.5"/><animate attributeName="opacity" dur="2.4s" repeatCount="indefinite" calcMode="discrete" values="1;0" keyTimes="0;0.5"/></circle></g>
-    <g transform="translate(-9 0)">
+    <g class="a-face"><g transform="translate(-9 0)">
     <g class="a-brow a-brow-l"><path class="a-line" d="M62 70.6Q73 66 85.5 73.2"/></g>
     <g class="a-brow a-brow-r"><path class="a-line" d="M62 70.6Q73 66 85.5 73.2" transform="translate(184 0) scale(-1 1)"/></g>
     
@@ -691,9 +696,9 @@ figure svg{width:140px;height:140px;margin:auto}figcaption{font-weight:600;margi
     <g class="a-mouth-slash"><path class="a-sign-out" d="M96 102 88 116"/><path class="a-sign-in" d="M96 102 88 116"/></g>
     <path class="a-mouth-flat a-line" d="M87.5 112.2h9"/>
     <path class="a-mouth-wavy a-line" d="M85 112.6q3.5-3 7 0t7 0"/>
-    </g>
+    </g></g>
     <text class="a-q a-extra" x="130" y="40">?</text>
     <text class="a-zz a-extra" x="124" y="40" font-size="18">z z</text>
-  </g></g>
+  </g></g></g>
 </svg><figcaption>sleeping</figcaption></figure></main>
 </body></html>

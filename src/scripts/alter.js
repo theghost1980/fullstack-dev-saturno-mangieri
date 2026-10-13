@@ -40,15 +40,29 @@ function initAlter(dock) {
     else setState(input.value ? "listening" : "idle");
   };
 
-  /* The eyes follow the pointer. */
+  /* The eyes follow the pointer, the face slides a little and the head leans toward it.
+     It looks ahead again when the pointer leaves the page. Not at all with reduced motion. */
   if (!reduceMotion) {
+    const look = (ux, uy, k) => {                       // direction (unit vector) and strength, 0 to 1
+      svg.style.setProperty("--px", (ux * k * 3.4).toFixed(2));    // pupils
+      svg.style.setProperty("--py", (uy * k * 3.4).toFixed(2));
+      svg.style.setProperty("--fx", (ux * k * 2).toFixed(2));      // face
+      svg.style.setProperty("--fy", (uy * k * 1.4).toFixed(2));
+      svg.style.setProperty("--tilt", (ux * k * 3).toFixed(2));    // head, in degrees
+    };
+    let pending = null;                                  // one update per frame, however fast the pointer moves
     addEventListener("pointermove", (e) => {
-      const r = svg.getBoundingClientRect();
-      const dx = e.clientX - (r.left + r.width * 0.415), dy = e.clientY - (r.top + r.height * 0.46);
-      const d = Math.hypot(dx, dy) || 1, k = Math.min(1, d / 160) * 3.4;
-      svg.style.setProperty("--px", ((dx / d) * k).toFixed(2));
-      svg.style.setProperty("--py", ((dy / d) * k).toFixed(2));
+      if (pending) { pending = e; return; }
+      pending = e;
+      requestAnimationFrame(() => {
+        const r = svg.getBoundingClientRect();
+        const dx = pending.clientX - (r.left + r.width * 0.415), dy = pending.clientY - (r.top + r.height * 0.46);
+        pending = null;
+        const d = Math.hypot(dx, dy) || 1;
+        look(dx / d, dy / d, Math.min(1, d / 160));
+      });
     }, { passive: true });
+    document.documentElement.addEventListener("pointerleave", () => look(0, 0, 0));
   }
 
   /* Asleep after a minute without anyone doing anything; any activity wakes it. */
@@ -63,19 +77,21 @@ function initAlter(dock) {
   const header = document.querySelector(".top");
   const wide = matchMedia("(min-width: 980px)");
   let open = false, perched = null, frame = 0;
+  let min = store.get("alterMin") === "1", lastMin = min;   // minimized: a small quiet planet in the corner
   const place = () => {
     frame = 0;
     const vw = document.documentElement.clientWidth, vh = innerHeight;
     let next = false, x, y, size;
-    if (stage && wide.matches && !open) {
+    if (stage && wide.matches && !open && !min) {
       const r = stage.getBoundingClientRect();
       size = 96;
       x = Math.min(r.right - size - 6, vw - size - 8);
       y = r.top - size * 0.78;                         // the planet's underside rests on the panel's top edge
       next = y >= (header ? header.getBoundingClientRect().bottom : 0) + 2 && r.top < vh - 60;
     }
-    if (!next) { size = wide.matches ? 76 : 64; x = vw - size - (wide.matches ? 20 : 12); y = vh - size - (wide.matches ? 18 : 12); }
-    if (perched !== null && next !== perched) {        // glide when changing place, stick while scrolling
+    if (!next) { size = min ? 44 : wide.matches ? 76 : 64; x = vw - size - (wide.matches ? 20 : 12); y = vh - size - (wide.matches ? 18 : 12); }
+    if ((perched !== null && next !== perched) || min !== lastMin) {   // glide when changing place or size, stick while scrolling
+      lastMin = min;
       dock.classList.add("is-moving");
       clearTimeout(place.t); place.t = setTimeout(() => dock.classList.remove("is-moving"), 600);
     }
@@ -90,6 +106,7 @@ function initAlter(dock) {
   addEventListener("resize", schedule);
   wide.addEventListener?.("change", schedule);
   place();
+  dock.classList.toggle("is-min", min);
   if (store.get("alterMet")) dock.classList.add("is-met");
   dock.classList.add("is-ready");
 
@@ -248,7 +265,31 @@ function initAlter(dock) {
       scrollLog();
     }
   }
-  toggle.addEventListener("click", () => setOpen(!open));
+  toggle.addEventListener("click", () => { if (min) { setMin(false); setOpen(true); } else setOpen(!open); });
   dock.querySelector("[data-alter-close]").addEventListener("click", () => { setOpen(false); toggle.focus(); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && open) { setOpen(false); toggle.focus(); } });
+
+  /* ---------- minimize ---------- */
+  function setMin(next) {
+    if (min === next) return;
+    min = next;
+    store.set("alterMin", next ? "1" : "0");
+    dock.classList.toggle("is-min", next);
+    if (next) setOpen(false);
+    place();
+  }
+  dock.querySelectorAll("[data-alter-min]").forEach((b) => b.addEventListener("click", () => { setMin(true); toggle.focus(); }));
+
+  /* ---------- an invitation ---------- */
+  /* Until it has been opened once, a small hop now and then says "click me" (the ring around it is in CSS).
+     Only four times, and never while minimized, busy, asleep, or with reduced motion. */
+  if (!reduceMotion) {
+    const nudge = (n) => setTimeout(() => {
+      if (!dock.classList.contains("is-met") && !open && !min && !busy && state === "idle" && !document.hidden) {
+        setState("happy"); moodTimer = setTimeout(() => setState(input.value ? "listening" : "idle"), 1500);
+      }
+      if (n < 4) nudge(n + 1);
+    }, n ? 14000 : 6000);
+    nudge(0);
+  }
 }

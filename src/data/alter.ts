@@ -53,6 +53,7 @@ export const alter = {
     hint: { en: "Ask me about Saturno", es: "Pregúntame por Saturno" },
     open: { en: "Open the chat with Alter", es: "Abrir el chat con Alter" },
     close: { en: "Close", es: "Cerrar" },
+    minimize: { en: "Minimize Alter", es: "Minimizar a Alter" },
     greeting: {
       en: "Hi, I'm Alter. Ask me about Saturno and his work, or pick a question.",
       es: "Hola, soy Alter. Pregúntame por Saturno y su trabajo, o elige una pregunta.",

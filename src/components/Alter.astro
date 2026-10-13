@@ -37,13 +37,21 @@ const config = {
     <span class="alter-figure" set:html={alterSVG({ uid: "alter" })} />
     <span class="sr">{t(s.open)}</span>
   </button>
+  <button class="alter-minchip" type="button" data-alter-min aria-label={t(s.minimize)} title={t(s.minimize)}>
+    <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
+  </button>
 
   <section class="alter-panel" id="alter-panel" role="dialog" aria-label={`${alter.name}, ${t(s.role)}`} tabindex="-1" hidden>
     <header class="alter-head">
       <p><strong>{alter.name}</strong><span>{t(s.role)}</span></p>
-      <button class="alter-close" type="button" data-alter-close aria-label={t(s.close)}>
-        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 3l10 10M13 3 3 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg>
-      </button>
+      <div class="alter-head-btns">
+        <button class="alter-close" type="button" data-alter-min aria-label={t(s.minimize)} title={t(s.minimize)}>
+          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </button>
+        <button class="alter-close" type="button" data-alter-close aria-label={t(s.close)} title={t(s.close)}>
+          <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 3l10 10M13 3 3 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg>
+        </button>
+      </div>
     </header>
     <ol class="alter-log" data-alter-log></ol>
     <div class="alter-live sr" data-alter-live aria-live="polite"></div>

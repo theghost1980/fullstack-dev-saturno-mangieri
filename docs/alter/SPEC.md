@@ -54,7 +54,7 @@ píxeles (diseño y código en la misma pieza).
 
 | Estado | Cuándo | Qué cambia |
 |---|---|---|
-| `idle` | esperando | flota, parpadea, sigue el cursor con los ojos |
+| `idle` | esperando | flota, parpadea y sigue el cursor: los ojos, la cara (hasta 2 unidades) y la cabeza (hasta 3°). Vuelve a mirar al frente cuando el cursor sale de la página. Quieto en `thinking` y `sleeping` |
 | `listening` | mientras el visitante escribe | ojos algo más grandes, cejas arriba, cabeza ladeada |
 | `thinking` | esperando la respuesta | mira arriba a la izquierda, los píxeles se dispersan, una luna coral recorre el anillo |
 | `speaking` | mientras se escribe la respuesta | mueve la boca, se balancea |
@@ -80,6 +80,13 @@ cursor, sin luna; las respuestas aparecen de golpe y los estados cambian solo la
 - Al cambiar de sitio se desliza (0,55 s); mientras se hace scroll va pegado al panel.
 - Lleva una etiqueta ("Pregúntame por Saturno") hasta que el visitante lo abre una vez en
   la sesión.
+- **Invitación**: hasta esa primera apertura, un anillo suave se expande desde el planeta y,
+  cuatro veces (a los 6 s y luego cada 14 s), da un salto. Con movimiento reducido el anillo
+  queda quieto y no hay saltos. Se detiene al abrirlo y mientras está minimizado.
+- **Minimizar**: un botón en la cabecera del chat y otro sobre el planeta (al pasar el ratón
+  o con el foco; siempre visible en pantallas táctiles). Minimizado es un planeta de 44 px en
+  la esquina, sin etiqueta ni anillo. Pulsarlo lo restaura y abre el chat. Se recuerda
+  durante la sesión de la pestaña.
 
 ## 4. La conversación
 
@@ -186,7 +193,7 @@ Respuesta `200`:
 | 403 | `forbidden` | la llamada no viene del propio sitio | mensaje de error |
 | 429 | `limit` | límite por visitante o diario, o la clave de OpenRouter se quedó sin crédito | mensaje de límite + agendar llamada |
 | 500 | `knowledge` | no pudo leer `/alter-knowledge.json` | mensaje de error |
-| 502 | `upstream` | fallo de OpenRouter o del modelo, o respuesta vacía | mensaje de error |
+| 502 | `upstream` | fallo de OpenRouter o del modelo, o respuesta vacía. Trae `reason` (`openrouter_<estado>`, `error_in_body`, `empty_answer`, `request_failed`) para distinguir la causa sin abrir los registros; nunca incluye detalles | mensaje de error |
 | 503 | `not_configured` | falta `OPENROUTER_API_KEY` | "solo puedo contestar las preguntas de abajo" |
 | 503 | `upstream` | OpenRouter saturado o sin proveedor disponible | mensaje de error |
 
@@ -210,8 +217,8 @@ sin crédito, Alter dice que no puede atender más preguntas y ofrece agendar un
 - La clave de OpenRouter solo existe como variable de entorno en Netlify; nunca llega al navegador.
 - La función no guarda ni registra lo que escribe el visitante: en el log solo quedan el
   modelo, el número de tokens y el coste.
-- En el navegador se usa `sessionStorage` para dos datos: si ya abrió a Alter y cuántas
-  preguntas lleva. Se borran al cerrar la pestaña.
+- En el navegador se usa `sessionStorage` para tres datos: si ya abrió a Alter, cuántas
+  preguntas lleva y si lo minimizó. Se borran al cerrar la pestaña.
 - Las preguntas escritas se envían a OpenRouter, que las pasa al proveedor del modelo
   elegido. Qué hace cada proveedor con esos datos depende de su política; en OpenRouter se
   puede restringir a proveedores que no guardan datos (ajustes de privacidad de la cuenta, o

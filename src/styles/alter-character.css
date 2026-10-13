@@ -26,7 +26,7 @@
   --alter-line:#061f2d; --alter-ring:#e8eef2; --alter-spark:#7fe9dc;
 }
 /* only the animated parts turn around their own centre; parts with an SVG transform are left alone */
-.alter .a-float,.alter .a-tilt,.alter .a-open,.alter .a-eye,.alter .a-brow,.alter .a-mouth-open,.alter .a-px,.alter .a-shadow,.alter .a-q,.alter .a-zz,.alter .a-spark{transform-box:fill-box;transform-origin:center}
+.alter .a-float,.alter .a-look,.alter .a-tilt,.alter .a-open,.alter .a-eye,.alter .a-brow,.alter .a-mouth-open,.alter .a-px,.alter .a-shadow,.alter .a-q,.alter .a-zz,.alter .a-spark{transform-box:fill-box;transform-origin:center}
 .alter .a-ring{fill:var(--alter-ring);fill-rule:evenodd}
 .alter .a-outline{fill:none;stroke:var(--alter-line);stroke-width:2.4;stroke-linecap:round}
 .alter .a-rim{fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;opacity:.55}
@@ -34,6 +34,11 @@
 .alter .a-sclera{fill:#fff;stroke:var(--alter-line);stroke-width:1.2}
 .alter .a-sclera-shade{fill:#c6dbe9}
 .alter .a-iris{transform:translate(calc(var(--px,0)*1px),calc(var(--py,0)*1px));transition:transform .12s ease-out}
+/* The face slides and the whole head leans a little toward the pointer. The variables are set by
+   src/scripts/alter.js, which does nothing when the visitor prefers reduced motion. */
+.alter .a-face{transform:translate(calc(var(--fx,0)*1px),calc(var(--fy,0)*1px));transition:transform .18s ease-out}
+.alter .a-look{transform:rotate(calc(var(--tilt,0)*1deg));transition:transform .25s ease-out}
+.alter.is-sleeping .a-face,.alter.is-sleeping .a-look,.alter.is-thinking .a-face,.alter.is-thinking .a-look{transform:none}
 .alter .a-hl{fill:#fff}
 .alter .a-line,.alter .a-lash,.alter .a-lid-low,.alter .a-closed{fill:none;stroke:var(--alter-line);stroke-linecap:round;stroke-linejoin:round}
 .alter .a-line{stroke-width:2.8}
