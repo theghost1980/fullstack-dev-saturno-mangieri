@@ -58,9 +58,10 @@
 .alter-act:hover { filter: brightness(1.12); }
 .alter-act--call { background: var(--coral); color: var(--on-coral); }
 .alter-dots i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--muted); margin-right: 5px; }
-.alter-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0.4rem 1.1rem 0.7rem; }
+.alter-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; padding: 0.4rem 1.1rem 0.7rem; }
 .alter-chips:empty { display: none; }
-.alter-chip { font: 500 0.85rem/1.2 var(--font-body); padding: 0.45rem 0.8rem; border-radius: 999px; border: 1.5px solid var(--line); background: transparent; text-align: left; }
+/* Small on purpose: they are suggestions, not the main thing. Still at least 24px tall. */
+.alter-chip { font: 500 0.75rem/1.2 var(--font-body); min-height: 26px; padding: 0.28rem 0.65rem; border-radius: 999px; border: 1px solid var(--line); background: transparent; text-align: left; }
 .alter-chip:hover { border-color: var(--teal); }
 .alter-chip:disabled, .alter-send:disabled { opacity: 0.5; cursor: default; }
 .alter-form { display: flex; gap: 0.4rem; padding: 0 0.8rem 0.6rem 1.1rem; }
@@ -84,6 +85,11 @@
 @media (max-width: 520px) {
   .alter-hint { font-size: 0.8rem; padding: 0.4rem 0.6rem; }
   .alter-panel { max-height: min(520px, calc(100dvh - 120px)); }
+}
+/* Wide screens: the chat is as tall as the window. It stops 12px below the top edge and rests,
+   as always, 10px above the planet (18px from the bottom): the 40px is those 12 + 10 + 18. */
+@media (min-width: 980px) {
+  .alter-panel { height: calc(100vh - var(--alter-size, 76px) - 40px); height: calc(100dvh - var(--alter-size, 76px) - 40px); max-height: none; }
 }
 /* Room above the demo panel for Alter to sit on its edge. */
 @media (min-width: 980px) { .hero { padding-top: 5rem; } }

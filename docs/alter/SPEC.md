@@ -77,6 +77,9 @@ cursor, sin luna; las respuestas aparecen de golpe y los estados cambian solo la
 - **Sentado** (`is-perched`): solo con ancho ≥ 980 px, panel cerrado, y mientras el panel de
   demos esté en pantalla y quepa bajo la cabecera. Se apoya en el borde superior derecho.
 - **En la esquina**: en cualquier otro caso. Abrir el chat siempre lo lleva a la esquina.
+- El panel de chat mide 370 px de ancho. En pantallas anchas (≥ 980 px) ocupa el alto de la
+  ventana: empieza a 12 px del borde superior y termina 10 px por encima del planeta. En
+  pantallas estrechas llega como máximo a 520 px de alto.
 - Al cambiar de sitio se desliza (0,55 s); mientras se hace scroll va pegado al panel.
 - Lleva una etiqueta ("Pregúntame por Saturno") hasta que el visitante lo abre una vez en
   la sesión.
