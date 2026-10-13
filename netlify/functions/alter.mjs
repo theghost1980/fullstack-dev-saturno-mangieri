@@ -121,8 +121,8 @@ export default async (req, context) => {
   try { origin = new URL(req.headers.get("origin") || ""); } catch { return json(403, { error: "forbidden" }); }
   if (origin.host !== here.host) return json(403, { error: "forbidden" });
 
-  /* trim(): a space or line break pasted with the key would make every request fail. */
-  const API_KEY = (process.env.OPENROUTER_API_KEY || "").trim();
+  /* A space, a line break or quotation marks pasted around the key would make every request fail: remove them. */
+  const API_KEY = (process.env.OPENROUTER_API_KEY || "").trim().replace(/^["']+|["']+$/g, "").trim();
   if (!API_KEY) return json(503, { error: "not_configured" });
 
   let body;
@@ -180,6 +180,8 @@ export default async (req, context) => {
     const detail = (await res.text().catch(() => "")).slice(0, 300);
     const hint = { 401: " (check OPENROUTER_API_KEY)", 402: " (no credits left, or the key reached its credit limit)", 404: ` (model "${MODEL}" not available: check ALTER_MODEL)` }[res.status] || "";
     console.error(`[alter] OpenRouter answered ${res.status}${hint}: ${detail}`);
+    /* For a 401: only the shape of the key (length, expected start, stray spaces), never any of its characters. */
+    if (res.status === 401) console.error(`[alter] key shape: length=${API_KEY.length}, starts with "sk-or-v1-"=${API_KEY.startsWith("sk-or-v1-")}, spaces inside=${/\s/.test(API_KEY)}`);
     if (res.status === 402) return json(429, { error: "limit" });           // out of budget: Alter says it cannot take more questions
     /* `reason` only says which step failed (never any detail), so a failure can be told apart without opening the logs. */
     return json(res.status === 429 || res.status === 503 ? 503 : 502, { error: "upstream", reason: `openrouter_${res.status}` });
