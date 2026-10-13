@@ -1,0 +1,89 @@
+---
+import { tr, type Lang } from "../i18n";
+import { useUI } from "../i18n/ui";
+import { projects } from "../data/projects";
+import { services } from "../data/services";
+import ProjectMedia from "./ProjectMedia.astro";
+import ExtIcon from "./ExtIcon.astro";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = useUI(lang);
+/* Filter buttons: only services that have at least one project. */
+const used = services.filter((s) => projects.some((p) => p.services.includes(s.id)));
+const showFilter = used.length > 1 && projects.length > 1;
+const rows = ["problem", "solution", "result"] as const;
+const total = projects.length;
+/* A project's own note wins; otherwise the status note, only when there is no live demo. */
+const noteFor = (p: (typeof projects)[number]) =>
+  tr(p.note, lang) || (p.liveUrl ? "" : ui.work.notes[p.status as keyof typeof ui.work.notes] ?? "");
+---
+<section class="sec" id="work">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>{ui.work.title}</h2>
+      <p>{ui.work.lead}</p>
+    </div>
+    <div class="work-bar">
+      {showFilter && (
+        <div class="filters" role="group" aria-label={ui.work.filterLabel}>
+          <button type="button" class="chip" data-filter="all" aria-pressed="true">{ui.work.all}</button>
+          {used.map((s) => (
+            <button type="button" class="chip" data-filter={s.id} aria-pressed="false"><i class={`svc-dot svc-dot--${s.id}`} aria-hidden="true"></i>{tr(s.short ?? s.name, lang)}</button>
+          ))}
+        </div>
+      )}
+      <p class="count" data-count data-showing={ui.work.showing} data-empty={ui.work.empty} data-total={total} aria-live="polite">
+        {ui.work.showing.replace("{n}", String(total)).replace("{total}", String(total))}
+      </p>
+    </div>
+    <div class={`work-grid${total < 2 ? " is-single" : ""}`}>
+      {total > 1 && (
+        <div class="index" data-index>
+          {projects.map((p, i) => (
+            <button type="button" class="index-item" data-index-item={i} aria-controls={`project-${p.slug}`} aria-current={i === 0 ? "true" : undefined}>
+              <span class="index-name">{p.name}</span>
+              <span class="index-type">{tr(p.type, lang)}</span>
+              <span class={`badge badge--${p.status}`}><i class="dot" aria-hidden="true"></i>{ui.work.status[p.status]}</span>
+            </button>
+          ))}
+        </div>
+      )}
+      <div class="projs">
+        {projects.map((p, i) => (
+          <article class={`proj${i === 0 ? " is-active" : ""}`} id={`project-${p.slug}`} data-project data-services={p.services.join(" ")}>
+            {(p.media.length > 0 || p.illustration) && <ProjectMedia project={p} lang={lang} />}
+            <div class="proj-body">
+              <p class="proj-meta">
+                <span class="proj-type">{tr(p.type, lang)}</span>
+                <span class={`badge badge--${p.status}`}><i class="dot" aria-hidden="true"></i>{ui.work.status[p.status]}</span>
+              </p>
+              <h3 class="proj-name">{p.name}</h3>
+              {rows.some((k) => tr(p[k], lang)) && (
+                <dl class="story">
+                  {rows.filter((k) => tr(p[k], lang)).map((k) => (
+                    <div class={`story-row story-row--${k}`}><dt>{ui.work.labels[k]}</dt><dd>{tr(p[k], lang)}</dd></div>
+                  ))}
+                </dl>
+              )}
+              {tr(p.role, lang) && <p class="proj-role"><span>{ui.work.labels.role}</span> {tr(p.role, lang)}</p>}
+              {(p.liveUrl || p.repoUrl || p.clientUrl || noteFor(p)) && (
+                <div class="proj-cta">
+                  {p.liveUrl && (
+                    <a class="btn btn-demo" href={p.liveUrl} target="_blank" rel="noopener">{ui.cta.open}<ExtIcon /><span class="sr"> {p.name}, {ui.work.opens}</span></a>
+                  )}
+                  {p.repoUrl && (
+                    <a class="btn btn-ghost" href={p.repoUrl} target="_blank" rel="noopener">{ui.cta.code}<ExtIcon /><span class="sr"> {p.name}, {ui.work.opens}</span></a>
+                  )}
+                  {p.clientUrl && (
+                    <a class="btn btn-ghost" href={p.clientUrl} target="_blank" rel="noopener">{ui.cta.client}<ExtIcon /><span class="sr"> {p.name}, {ui.work.opens}</span></a>
+                  )}
+                  {noteFor(p) && <p class="proj-note">{noteFor(p)}</p>}
+                </div>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

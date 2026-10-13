@@ -1,0 +1,28 @@
+---
+import { tr, type Lang } from "../i18n";
+import { useUI } from "../i18n/ui";
+import { experience } from "../data/experience";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = useUI(lang);
+---
+<section class="sec sec--wash-mint" id="experience">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>{ui.experience.title}</h2>
+      <p>{ui.experience.lead}</p>
+    </div>
+    <ol class="jobs">
+      {experience.map((j) => (
+        <li class="job">
+          <p class="job-when">{tr(j.period, lang)}</p>
+          <div class="job-what">
+            <h3 class="job-title">{j.org && <span class="job-org">{j.org}</span>}{tr(j.title, lang)}</h3>
+            <p class="job-sum">{tr(j.summary, lang)}</p>
+            {j.stack.length > 0 && <ul class="job-stack">{j.stack.map((t) => <li>{t}</li>)}</ul>}
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

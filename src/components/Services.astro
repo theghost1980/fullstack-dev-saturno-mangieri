@@ -1,0 +1,37 @@
+---
+import { tr, type Lang } from "../i18n";
+import { useUI } from "../i18n/ui";
+import { services } from "../data/services";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = useUI(lang);
+const main = services.filter((s) => s.primary);
+const also = services.filter((s) => !s.primary);
+---
+<section class="sec sec--wash-blue" id="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>{ui.services.title}</h2>
+      <p>{ui.services.lead}</p>
+    </div>
+    <div class="svc-panel">
+      <div class="svcs">
+        {main.map((s) => (
+          <article class={`svc svc--${s.id}`}>
+            <h3 class="svc-name">{tr(s.name, lang)}</h3>
+            <p class="svc-sum">{tr(s.summary, lang)}</p>
+            {s.items.length > 0 && <ul class="svc-items">{s.items.map((it) => <li>{tr(it, lang)}</li>)}</ul>}
+          </article>
+        ))}
+      </div>
+      {also.length > 0 && (
+        <div class="also">
+          <p class="also-label">{ui.services.also}</p>
+          <ul class="also-list">
+            {also.map((s) => <li><strong><i class={`svc-dot svc-dot--${s.id}`} aria-hidden="true"></i>{tr(s.name, lang)}</strong><span>{tr(s.summary, lang)}</span></li>)}
+          </ul>
+        </div>
+      )}
+    </div>
+  </div>
+</section>

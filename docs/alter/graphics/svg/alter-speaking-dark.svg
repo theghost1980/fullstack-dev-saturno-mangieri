@@ -1,0 +1,166 @@
+<svg class="alter is-speaking" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Alter (speaking)">
+<style>/* =====================================================================
+   ALTER — the character (the drawing itself; the chat panel around it is
+   in alter-widget.css).
+   Drawn like a cel: ink outline, one hard-edged shadow, a rim light.
+   States are classes on the <svg>: is-idle, is-listening, is-thinking,
+   is-speaking, is-happy, is-unsure, is-sleeping.
+   The markup comes from src/lib/alter-svg.js.
+   ===================================================================== */
+.alter{
+  --alter-a:#2ba6d6; --alter-m:#0d7ea8; --alter-b:#008673;      /* lit side */
+  --alter-sa:#0b5c82; --alter-sm:#074f6d; --alter-sb:#00594f;   /* shadow side */
+  --alter-line:#072a3c; --alter-ring:#14212c; --alter-spark:#00a693; --alter-moon:#ff6b4a; --alter-blush:#ff9079;
+  display:block;overflow:visible;
+}
+/* only the animated parts turn around their own centre; parts with an SVG transform are left alone */
+.alter .a-float,.alter .a-tilt,.alter .a-open,.alter .a-eye,.alter .a-brow,.alter .a-mouth-open,.alter .a-px,.alter .a-shadow,.alter .a-q,.alter .a-zz,.alter .a-spark{transform-box:fill-box;transform-origin:center}
+.alter .a-ring{fill:var(--alter-ring);fill-rule:evenodd}
+.alter .a-outline{fill:none;stroke:var(--alter-line);stroke-width:2.4;stroke-linecap:round}
+.alter .a-rim{fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;opacity:.55}
+.alter .a-rim-dot{fill:#fff;opacity:.6}
+.alter .a-sclera{fill:#fff;stroke:var(--alter-line);stroke-width:1.2}
+.alter .a-sclera-shade{fill:#c6dbe9}
+.alter .a-iris{transform:translate(calc(var(--px,0)*1px),calc(var(--py,0)*1px));transition:transform .12s ease-out}
+.alter .a-hl{fill:#fff}
+.alter .a-line,.alter .a-lash,.alter .a-lid-low,.alter .a-closed{fill:none;stroke:var(--alter-line);stroke-linecap:round;stroke-linejoin:round}
+.alter .a-line{stroke-width:2.8}
+.alter .a-lash{stroke-width:4.2}
+.alter .a-lid-low{stroke-width:1.6;opacity:.75}
+.alter .a-closed{stroke-width:4}
+.alter .a-blush{fill:none;stroke:var(--alter-blush);stroke-width:1.9;stroke-linecap:round}
+.alter .a-sign-out{fill:none;stroke:var(--alter-line);stroke-width:8.5;stroke-linecap:round;stroke-linejoin:round}
+.alter .a-sign-in{fill:none;stroke:#fff;stroke-width:4.4;stroke-linecap:round;stroke-linejoin:round}
+.alter .a-moon{fill:var(--alter-moon);stroke:var(--alter-line);stroke-width:2}
+.alter .a-spark{fill:var(--alter-spark)}
+.alter .a-shadow{fill:#000;opacity:.13}
+.alter .a-extra{font:800 22px/1 system-ui,sans-serif;fill:var(--alter-ring)}
+/* parts that only show in some states */
+.alter .a-chev,.alter .a-closed,.alter .a-mouth-open,.alter .a-mouth-slash,.alter .a-mouth-flat,.alter .a-mouth-wavy,.alter .a-blush,.alter .a-q,.alter .a-zz,.alter .a-moons{display:none}
+
+.alter.is-happy .a-open,.alter.is-sleeping .a-open,.alter.is-happy .a-brow{display:none}
+.alter.is-happy .a-chev,.alter.is-happy .a-blush,.alter.is-happy .a-mouth-slash{display:block}
+.alter.is-happy .a-mouth-smile,.alter.is-speaking .a-mouth-smile,.alter.is-unsure .a-mouth-smile,.alter.is-sleeping .a-mouth-smile,.alter.is-thinking .a-mouth-smile{display:none}
+.alter.is-speaking .a-mouth-open{display:block}
+.alter.is-unsure .a-mouth-wavy,.alter.is-unsure .a-q{display:block}
+.alter.is-thinking .a-mouth-flat,.alter.is-thinking .a-moons{display:block}
+.alter.is-sleeping .a-closed,.alter.is-sleeping .a-mouth-flat,.alter.is-sleeping .a-zz{display:block}
+.alter.is-thinking .a-iris{transform:translate(-2.2px,-3px)}
+.alter.is-unsure .a-iris{transform:translate(2.6px,-1px)}
+.alter.is-listening .a-eye{transform:scale(1.1)}
+.alter.is-listening .a-brow{transform:translateY(-2.6px)}
+.alter.is-unsure .a-brow-r{transform:translateY(-4px) rotate(8deg)}
+.alter.is-sleeping .a-brow{transform:translateY(1.6px)}
+.alter .a-eye,.alter .a-brow{transition:transform .2s ease}
+
+@media (prefers-reduced-motion:no-preference){
+  .alter .a-float{animation:a-float 3.6s ease-in-out infinite}
+  .alter .a-shadow{animation:a-shadow 3.6s ease-in-out infinite}
+  .alter .a-open{animation:a-blink 4.8s infinite}
+  .alter .a-eye-r .a-open{animation-delay:.04s}
+  .alter .a-spark{animation:a-twinkle 2.8s ease-in-out infinite;animation-delay:var(--d,0s)}
+  .alter.is-listening .a-tilt{transform:rotate(-5deg);transition:transform .25s ease}
+  .alter.is-unsure .a-tilt{transform:rotate(6deg);transition:transform .25s ease}
+  .alter.is-speaking .a-mouth-open{animation:a-talk .34s ease-in-out infinite}
+  .alter.is-speaking .a-float{animation:a-bob .68s ease-in-out infinite}
+  .alter.is-happy .a-float{animation:a-hop .7s cubic-bezier(.3,.7,.3,1) 2,a-float 3.6s 1.4s ease-in-out infinite}
+  .alter.is-thinking .a-px{animation:a-px 1.9s ease-in-out infinite;animation-delay:var(--d)}
+  .alter.is-sleeping .a-float{animation-duration:6s}
+  .alter.is-sleeping .a-zz{animation:a-zz 2.6s ease-in-out infinite}
+  .alter.is-unsure .a-q{animation:a-pop .4s cubic-bezier(.3,1.6,.5,1) both}
+  @keyframes a-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+  @keyframes a-shadow{0%,100%{transform:scaleX(1);opacity:.13}50%{transform:scaleX(.9);opacity:.09}}
+  @keyframes a-blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+  @keyframes a-twinkle{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.55);opacity:.5}}
+  @keyframes a-talk{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1.15)}}
+  @keyframes a-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2.5px)}}
+  @keyframes a-hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-14px)}}
+  @keyframes a-px{0%,100%{transform:translate(0,0);opacity:var(--o,1)}50%{transform:translate(calc(var(--dx)*1px),calc(var(--dy)*1px));opacity:.5}}
+  @keyframes a-zz{0%{transform:translate(0,4px);opacity:0}40%{opacity:1}100%{transform:translate(6px,-8px);opacity:0}}
+  @keyframes a-pop{from{transform:scale(.2);opacity:0}to{transform:scale(1);opacity:1}}
+}
+@media (prefers-reduced-motion:reduce){ .alter .a-moons{display:none!important} }
+.alter{--alter-a:#3db4e2;--alter-m:#1389b3;--alter-b:#0a9a86;--alter-sa:#0d5f86;--alter-sm:#0a5573;--alter-sb:#06655a;--alter-line:#061f2d;--alter-ring:#e8eef2;--alter-spark:#7fe9dc}</style>
+  <defs>
+    <linearGradient id="alter-speakingg" gradientUnits="userSpaceOnUse" x1="55" y1="50" x2="140" y2="152"><stop offset="0" style="stop-color:var(--alter-a)"/><stop offset=".55" style="stop-color:var(--alter-m)"/><stop offset="1" style="stop-color:var(--alter-b)"/></linearGradient>
+    <linearGradient id="alter-speakings" gradientUnits="userSpaceOnUse" x1="55" y1="50" x2="140" y2="152"><stop offset="0" style="stop-color:var(--alter-sa)"/><stop offset=".55" style="stop-color:var(--alter-sm)"/><stop offset="1" style="stop-color:var(--alter-sb)"/></linearGradient>
+    <linearGradient id="alter-speakingi" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#06283d"/><stop offset=".5" stop-color="#12b5b8"/><stop offset="1" stop-color="#9bf7e6"/></linearGradient>
+    <clipPath id="alter-speakingc"><rect x="0" y="0" width="120" height="200"/></clipPath>
+    <clipPath id="alter-speakingf"><rect x="0" y="98.5" width="200" height="60"/></clipPath>
+    <clipPath id="alter-speakingk"><rect x="0" y="38.5" width="200" height="60"/></clipPath>
+    <clipPath id="alter-speakingel"><path d="M66.5 86.4L70.2 80.6Q79 77.6 88 82.6L89.8 88.4C89 97 83.5 102.6 77 102.6C70.5 102.6 66 96.6 66.5 86.4Z"/></clipPath>
+    <clipPath id="alter-speakinger"><path d="M66.5 86.4L70.2 80.6Q79 77.6 88 82.6L89.8 88.4C89 97 83.5 102.6 77 102.6C70.5 102.6 66 96.6 66.5 86.4Z" transform="translate(184 0) scale(-1 1)"/></clipPath>
+    <mask id="alter-speakingm" maskUnits="userSpaceOnUse" x="-20" y="-20" width="240" height="240"><rect x="-20" y="-20" width="240" height="240" fill="#fff"/><path d="M9 98.5A91 20.5 0 0 0 191 98.5" transform="rotate(-18 100 100)" fill="none" stroke="#000" stroke-width="18"/></mask>
+    <mask id="alter-speakingb" maskUnits="userSpaceOnUse" x="-20" y="-20" width="240" height="240"><rect x="-20" y="-20" width="240" height="240" fill="#fff"/><circle cx="100" cy="100" r="60" fill="#000"/></mask>
+    <mask id="alter-speakingh" maskUnits="userSpaceOnUse" x="0" y="0" width="200" height="200"><rect width="200" height="200" fill="#fff"/><circle cx="88" cy="86" r="58" fill="#000"/></mask>
+  </defs>
+  <ellipse class="a-shadow" cx="100" cy="186" rx="44" ry="6"/>
+  <g class="a-float"><g class="a-tilt">
+    <g transform="translate(49 46) scale(0.8)"><path class="a-spark" style="--d:0s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g><g transform="translate(37 62) scale(0.4)"><path class="a-spark" style="--d:-1.2s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g><g transform="translate(170 156) scale(0.5)"><path class="a-spark" style="--d:-0.6s" d="M0-8C.9-2.5 2.5-.9 8 0C2.5.9.9 2.5 0 8C-.9 2.5-2.5.9-8 0C-2.5-.9-.9-2.5 0-8Z"/></g>
+    <g mask="url(#alter-speakingb)"><g transform="rotate(-18 100 100)"><path class="a-ring" d="M6 100a94 24 0 1 0 188 0a94 24 0 1 0 -188 0ZM12 97a88 17 0 1 0 176 0a88 17 0 1 0 -176 0Z" clip-path="url(#alter-speakingk)"/></g></g>
+    <g class="a-moons" transform="rotate(-18 100 100)"><circle class="a-moon" r="6.5" mask="url(#alter-speakingb)"><animateMotion dur="2.4s" repeatCount="indefinite" path="M191 98.5A91 20.5 0 0 1 9 98.5A91 20.5 0 0 1 191 98.5"/><animate attributeName="opacity" dur="2.4s" repeatCount="indefinite" calcMode="discrete" values="0;1" keyTimes="0;0.5"/></circle></g>
+    <g mask="url(#alter-speakingm)">
+      <g clip-path="url(#alter-speakingc)">
+        <circle cx="100" cy="100" r="56" fill="url(#alter-speakingg)"/>
+        <circle cx="100" cy="100" r="56" fill="url(#alter-speakings)" mask="url(#alter-speakingh)"/>
+      </g>
+      <rect class="a-px" x="121.7" y="56.1" width="6.8" height="6.8" rx="1" fill="url(#alter-speakingg)" style="--o:1;--dx:18.0;--dy:-12.2;--d:-0.66s"/><rect class="a-px" x="121.7" y="65.1" width="6.8" height="6.8" rx="1" fill="url(#alter-speakingg)" style="--o:1;--dx:11.7;--dy:-6.8;--d:-1.10s"/><rect class="a-px" x="121.7" y="74.1" width="6.8" height="6.8" rx="1" fill="url(#alter-speakingg)" style="--o:1;--dx:28.0;--dy:-12.5;--d:0.00s"/><rect class="a-px" x="121.7" y="83.1" width="6.8" height="6.8" rx="1" fill="url(#alter-speakingg)" style="--o:1;--dx:21.3;--dy:-6.1;--d:-0.44s"/><rect class="a-px" x="121.7" y="92.1" width="6.8" height="6.8" rx="1" fill="url(#alter-speakingg)" style="--o:1;--dx:12.7;--dy:-1.3;--d:-0.88s"/><rect class="a-px" x="121.7" y="101.1" width="6.8" height="6.8" rx="1" fill="url(#alter-speakingg)" style="--o:1;--dx:30.4;--dy:3.0;--d:-1.32s"/><rect class="a-px" x="121.7" y="110.1" width="6.8" height="6.8" rx="1" fill="url(#alter-speakingg)" style="--o:1;--dx:19.0;--dy:5.5;--d:-0.22s"/><rect class="a-px" x="121.7" y="119.1" width="6.8" height="6.8" rx="1" fill="url(#alter-speakingg)" style="--o:1;--dx:32.3;--dy:14.4;--d:-0.66s"/><rect class="a-px" x="121.7" y="128.1" width="6.8" height="6.8" rx="1" fill="url(#alter-speakings)" style="--o:1;--dx:21.5;--dy:12.4;--d:-1.10s"/><rect class="a-px" x="121.7" y="137.1" width="6.8" height="6.8" rx="1" fill="url(#alter-speakings)" style="--o:1;--dx:12.6;--dy:8.6;--d:0.00s"/><rect class="a-px" x="131.2" y="56.6" width="5.8" height="5.8" rx="1" fill="url(#alter-speakingg)" style="--o:1;--dx:13.9;--dy:-7.7;--d:-1.10s"/><rect class="a-px" x="131.2" y="65.6" width="5.8" height="5.8" rx="1" fill="url(#alter-speakingg)" style="--o:1;--dx:29.9;--dy:-13.7;--d:0.00s"/><rect class="a-px" x="131.2" y="74.6" width="5.8" height="5.8" rx="1" fill="url(#alter-speakingg)" style="--o:1;--dx:23.0;--dy:-7.9;--d:-0.44s"/><rect class="a-px" x="131.2" y="83.6" width="5.8" height="5.8" rx="1" fill="url(#alter-speakingg)" style="--o:1;--dx:14.7;--dy:-3.2;--d:-0.88s"/><rect class="a-px" x="131.2" y="92.6" width="5.8" height="5.8" rx="1" fill="url(#alter-speakingg)" style="--o:1;--dx:33.1;--dy:-2.4;--d:-1.32s"/><rect class="a-px" x="131.2" y="101.6" width="5.8" height="5.8" rx="1" fill="url(#alter-speakingg)" style="--o:1;--dx:22.9;--dy:1.7;--d:-0.22s"/><rect class="a-px" x="131.2" y="110.6" width="5.8" height="5.8" rx="1" fill="url(#alter-speakingg)" style="--o:1;--dx:12.2;--dy:2.7;--d:-0.66s"/><rect class="a-px" x="131.2" y="119.6" width="5.8" height="5.8" rx="1" fill="url(#alter-speakings)" style="--o:1;--dx:27.5;--dy:9.5;--d:-1.10s"/><rect class="a-px" x="131.2" y="128.6" width="5.8" height="5.8" rx="1" fill="url(#alter-speakings)" style="--o:1;--dx:17.1;--dy:7.8;--d:0.00s"/><rect class="a-px" x="131.2" y="137.6" width="5.8" height="5.8" rx="1" fill="url(#alter-speakings)" style="--o:1;--dx:29.9;--dy:16.5;--d:-0.44s"/><rect class="a-px" x="140.8" y="66.2" width="4.7" height="4.7" rx="1" fill="url(#alter-speakingg)" style="--o:1;--dx:24.8;--dy:-9.3;--d:-0.44s"/><rect class="a-px" x="140.8" y="75.2" width="4.7" height="4.7" rx="1" fill="url(#alter-speakingg)" style="--o:1;--dx:16.6;--dy:-4.7;--d:-0.88s"/><rect class="a-px" x="140.8" y="84.2" width="4.7" height="4.7" rx="1" fill="url(#alter-speakingg)" style="--o:1;--dx:34.8;--dy:-6.0;--d:-1.32s"/><rect class="a-px" x="140.8" y="93.2" width="4.7" height="4.7" rx="1" fill="url(#alter-speakingg)" style="--o:1;--dx:25.5;--dy:-1.5;--d:-0.22s"/><rect class="a-px" x="140.8" y="102.2" width="4.7" height="4.7" rx="1" fill="url(#alter-speakings)" style="--o:1;--dx:15.3;--dy:0.9;--d:-0.66s"/><rect class="a-px" x="140.8" y="111.2" width="4.7" height="4.7" rx="1" fill="url(#alter-speakings)" style="--o:1;--dx:32.3;--dy:5.6;--d:-1.10s"/><rect class="a-px" x="140.8" y="120.2" width="4.7" height="4.7" rx="1" fill="url(#alter-speakings)" style="--o:1;--dx:21.4;--dy:6.0;--d:0.00s"/><rect class="a-px" x="140.8" y="129.2" width="4.7" height="4.7" rx="1" fill="url(#alter-speakings)" style="--o:1;--dx:11.3;--dy:4.2;--d:-0.44s"/><rect class="a-px" x="150.4" y="84.8" width="3.4" height="3.4" rx="1" fill="url(#alter-speakings)" style="--o:1;--dx:27.6;--dy:-4.0;--d:-0.22s"/><rect class="a-px" x="150.4" y="93.8" width="3.4" height="3.4" rx="1" fill="url(#alter-speakings)" style="--o:1;--dx:17.9;--dy:-0.9;--d:-0.66s"/><rect class="a-px" x="150.4" y="102.8" width="3.4" height="3.4" rx="1" fill="url(#alter-speakings)" style="--o:1;--dx:35.8;--dy:1.7;--d:-1.10s"/><rect class="a-px" x="150.4" y="111.8" width="3.4" height="3.4" rx="1" fill="url(#alter-speakings)" style="--o:1;--dx:25.1;--dy:3.6;--d:0.00s"/><rect class="a-px" x="164.3" y="56.3" width="3.4" height="3.4" rx="1" fill="url(#alter-speakings)" opacity="0.8" style="--o:0.8;--dx:16.2;--dy:-5.4;--d:0.00s"/><rect class="a-px" x="173.7" y="45.7" width="2.6" height="2.6" rx="1" fill="url(#alter-speakings)" opacity="0.55" style="--o:0.55;--dx:34.0;--dy:-12.5;--d:-1.10s"/><rect class="a-px" x="159.8" y="43.8" width="2.4" height="2.4" rx="1" fill="url(#alter-speakings)" opacity="0.6" style="--o:0.6;--dx:25.8;--dy:-11.6;--d:-0.66s"/><rect class="a-px" x="163.5" y="111.5" width="3.0" height="3.0" rx="1" fill="url(#alter-speakings)" opacity="0.75" style="--o:0.75;--dx:27.8;--dy:3.1;--d:-1.10s"/><rect class="a-px" x="170.8" y="125.8" width="2.4" height="2.4" rx="1" fill="url(#alter-speakings)" opacity="0.5" style="--o:0.5;--dx:27.0;--dy:5.6;--d:-1.10s"/><rect class="a-px" x="159.7" y="139.7" width="2.6" height="2.6" rx="1" fill="url(#alter-speakings)" opacity="0.6" style="--o:0.6;--dx:13.7;--dy:4.8;--d:-0.22s"/>
+      <path class="a-outline" d="M120 47.7A56 56 0 1 0 120 152.3"/>
+      <path class="a-rim" d="M63.2 63.2A52 52 0 0 1 92.8 48.5"/><circle class="a-rim-dot" cx="101.8" cy="48" r="1.8"/>
+    </g>
+    <g transform="rotate(-18 100 100)"><path class="a-ring" d="M6 100a94 24 0 1 0 188 0a94 24 0 1 0 -188 0ZM12 97a88 17 0 1 0 176 0a88 17 0 1 0 -176 0Z" clip-path="url(#alter-speakingf)"/></g>
+    <g class="a-moons" transform="rotate(-18 100 100)"><circle class="a-moon" r="6.5"><animateMotion dur="2.4s" repeatCount="indefinite" path="M191 98.5A91 20.5 0 0 1 9 98.5A91 20.5 0 0 1 191 98.5"/><animate attributeName="opacity" dur="2.4s" repeatCount="indefinite" calcMode="discrete" values="1;0" keyTimes="0;0.5"/></circle></g>
+    <g transform="translate(-9 0)">
+    <g class="a-brow a-brow-l"><path class="a-line" d="M62 70.6Q73 66 85.5 73.2"/></g>
+    <g class="a-brow a-brow-r"><path class="a-line" d="M62 70.6Q73 66 85.5 73.2" transform="translate(184 0) scale(-1 1)"/></g>
+    
+    <g transform="translate(-2.5 0)"><g class="a-eye a-eye-l">
+      <g class="a-open">
+        <path class="a-sclera" d="M66.5 86.4L70.2 80.6Q79 77.6 88 82.6L89.8 88.4C89 97 83.5 102.6 77 102.6C70.5 102.6 66 96.6 66.5 86.4Z"/>
+        <g clip-path="url(#alter-speakingel)">
+          <rect class="a-sclera-shade" x="64.8" y="76" width="28" height="9.6"/>
+          <g class="a-iris">
+            <ellipse cx="78.8" cy="92.5" rx="7.8" ry="9.8" fill="url(#alter-speakingi)" stroke="var(--alter-line)" stroke-width="1.5"/>
+            <ellipse cx="78.8" cy="93" rx="3.1" ry="4.4" fill="#04141f"/>
+            <ellipse class="a-hl" cx="75.8" cy="88" rx="2.5" ry="3.1" transform="rotate(-18 75.8 88)"/>
+            <circle class="a-hl" cx="82" cy="97.6" r="1.25" opacity=".85"/>
+          </g>
+        </g>
+        <g>
+          <path class="a-lash" d="M65.4 87.4L69.6 80.2Q79 76.9 88.5 82.2L90.6 88.8"/>
+          <path class="a-lid-low" d="M72 103.3Q77 104.8 81.5 103"/>
+        </g>
+      </g>
+      <path class="a-closed" d="M67 93Q78 99 89 93"/>
+    </g></g>
+    <g transform="translate(2.5 0)"><g class="a-eye a-eye-r">
+      <g class="a-open">
+        <path class="a-sclera" d="M66.5 86.4L70.2 80.6Q79 77.6 88 82.6L89.8 88.4C89 97 83.5 102.6 77 102.6C70.5 102.6 66 96.6 66.5 86.4Z" transform="translate(184 0) scale(-1 1)"/>
+        <g clip-path="url(#alter-speakinger)">
+          <rect class="a-sclera-shade" x="91.2" y="76" width="28" height="9.6"/>
+          <g class="a-iris">
+            <ellipse cx="105.2" cy="92.5" rx="7.8" ry="9.8" fill="url(#alter-speakingi)" stroke="var(--alter-line)" stroke-width="1.5"/>
+            <ellipse cx="105.2" cy="93" rx="3.1" ry="4.4" fill="#04141f"/>
+            <ellipse class="a-hl" cx="102.2" cy="88" rx="2.5" ry="3.1" transform="rotate(-18 102.2 88)"/>
+            <circle class="a-hl" cx="108.4" cy="97.6" r="1.25" opacity=".85"/>
+          </g>
+        </g>
+        <g transform="translate(184 0) scale(-1 1)">
+          <path class="a-lash" d="M65.4 87.4L69.6 80.2Q79 76.9 88.5 82.2L90.6 88.8"/>
+          <path class="a-lid-low" d="M72 103.3Q77 104.8 81.5 103"/>
+        </g>
+      </g>
+      <path class="a-closed" d="M67 93Q78 99 89 93" transform="translate(184 0) scale(-1 1)"/>
+    </g></g>
+    <path class="a-blush" d="M62 109.5l2.6-4.6M66 110.5l2.6-4.6M70 111.5l2.6-4.6M109 111.5l2.6-4.6M113 110.5l2.6-4.6M117 109.5l2.6-4.6"/>
+    <g class="a-chev"><path class="a-sign-out" d="M86 81 72 91 86 101M98 81 112 91 98 101"/><path class="a-sign-in" d="M86 81 72 91 86 101M98 81 112 91 98 101"/></g>
+    <path class="a-mouth-smile a-line" d="M85.5 111.6Q91 114 98.5 110.9"/>
+    <ellipse class="a-mouth-open" cx="92" cy="112.4" rx="4.2" ry="3.6" fill="#04141f"/>
+    <g class="a-mouth-slash"><path class="a-sign-out" d="M96 102 88 116"/><path class="a-sign-in" d="M96 102 88 116"/></g>
+    <path class="a-mouth-flat a-line" d="M87.5 112.2h9"/>
+    <path class="a-mouth-wavy a-line" d="M85 112.6q3.5-3 7 0t7 0"/>
+    </g>
+    <text class="a-q a-extra" x="130" y="40">?</text>
+    <text class="a-zz a-extra" x="124" y="40" font-size="18">z z</text>
+  </g></g>
+</svg>

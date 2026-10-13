@@ -1,0 +1,15 @@
+---
+import { tr, type Lang } from "../i18n";
+import { stats } from "../data/stats";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+---
+<section class="stats-band">
+  <div class="wrap">
+    <ul class="stats" data-n={stats.length}>
+      {stats.map((s) => (
+        <li class="stat"><strong class="stat-v">{tr(s.value, lang)}</strong><span class="stat-l">{tr(s.label, lang)}</span></li>
+      ))}
+    </ul>
+  </div>
+</section>

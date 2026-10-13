@@ -1,0 +1,52 @@
+---
+import { type Lang } from "../i18n";
+import { useUI } from "../i18n/ui";
+import { bookAttrs } from "../data/site";
+import { projects } from "../data/projects";
+import Shot from "./Shot.astro";
+import Illustration from "./Illustration.astro";
+import ExtIcon from "./ExtIcon.astro";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = useUI(lang);
+/* Every project marked hero: true that has a live URL gets a tab in the switcher. */
+const demos = projects.filter((p) => p.hero && p.liveUrl && (p.media.length > 0 || p.illustration));
+const host = (url: string) => { try { return new URL(url).host; } catch { return ""; } };
+---
+<section class="hero">
+  <div class="wrap hero-in">
+    <div class="hero-copy">
+      <h1>{ui.hero.title}</h1>
+      <p class="hero-sub">{ui.hero.sub}</p>
+      <div class="hero-cta">
+        <a class="btn btn-ink" href="#work">{ui.cta.demos}</a>
+        <a class="btn btn-primary" {...bookAttrs}>{ui.cta.book}</a>
+      </div>
+    </div>
+    {demos.length > 0 && (
+      <div class="stage" data-tabs>
+        <div class="stage-tabs" role="tablist" aria-label={ui.hero.stageLabel}>
+          {demos.map((p, i) => (
+            <button type="button" role="tab" id={`demo-tab-${p.slug}`} aria-controls={`demo-panel-${p.slug}`} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1}>
+              <i class="dot" aria-hidden="true"></i>{p.name}
+            </button>
+          ))}
+        </div>
+        <div class="stage-panels">
+          {demos.map((p, i) => (
+            <div class="stage-panel" role="tabpanel" id={`demo-panel-${p.slug}`} aria-labelledby={`demo-tab-${p.slug}`} hidden={i > 0}>
+              <div class="stage-shot">
+                {p.media.length > 0
+                  ? <Shot media={p.media[0]} lang={lang} label={host(p.liveUrl)} eager={i === 0} />
+                  : <Illustration name={p.illustration!} frame={p.illustrationFrame ?? "browser"} lang={lang} title={p.name} label={host(p.liveUrl)} />}
+              </div>
+              <a class="btn btn-stage" href={p.liveUrl} target="_blank" rel="noopener">
+                {ui.cta.open}<ExtIcon /><span class="sr"> {p.name}, {ui.work.opens}</span>
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+</section>

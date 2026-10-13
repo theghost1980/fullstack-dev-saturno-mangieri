@@ -1,0 +1,94 @@
+/* =====================================================================
+   ALTER — the character (the drawing itself; the chat panel around it is
+   in alter-widget.css).
+   Drawn like a cel: ink outline, one hard-edged shadow, a rim light.
+   States are classes on the <svg>: is-idle, is-listening, is-thinking,
+   is-speaking, is-happy, is-unsure, is-sleeping.
+   The markup comes from src/lib/alter-svg.js.
+   ===================================================================== */
+.alter{
+  --alter-a:#2ba6d6; --alter-m:#0d7ea8; --alter-b:#008673;      /* lit side */
+  --alter-sa:#0b5c82; --alter-sm:#074f6d; --alter-sb:#00594f;   /* shadow side */
+  --alter-line:#072a3c; --alter-ring:#14212c; --alter-spark:#00a693; --alter-moon:#ff6b4a; --alter-blush:#ff9079;
+  display:block;overflow:visible;
+}
+/* Dark values, written twice like the rest of the site: system is dark, or the visitor chose dark. */
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .alter{
+    --alter-a:#3db4e2; --alter-m:#1389b3; --alter-b:#0a9a86;
+    --alter-sa:#0d5f86; --alter-sm:#0a5573; --alter-sb:#06655a;
+    --alter-line:#061f2d; --alter-ring:#e8eef2; --alter-spark:#7fe9dc;
+  }
+}
+:root[data-theme="dark"] .alter{
+  --alter-a:#3db4e2; --alter-m:#1389b3; --alter-b:#0a9a86;
+  --alter-sa:#0d5f86; --alter-sm:#0a5573; --alter-sb:#06655a;
+  --alter-line:#061f2d; --alter-ring:#e8eef2; --alter-spark:#7fe9dc;
+}
+/* only the animated parts turn around their own centre; parts with an SVG transform are left alone */
+.alter .a-float,.alter .a-tilt,.alter .a-open,.alter .a-eye,.alter .a-brow,.alter .a-mouth-open,.alter .a-px,.alter .a-shadow,.alter .a-q,.alter .a-zz,.alter .a-spark{transform-box:fill-box;transform-origin:center}
+.alter .a-ring{fill:var(--alter-ring);fill-rule:evenodd}
+.alter .a-outline{fill:none;stroke:var(--alter-line);stroke-width:2.4;stroke-linecap:round}
+.alter .a-rim{fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;opacity:.55}
+.alter .a-rim-dot{fill:#fff;opacity:.6}
+.alter .a-sclera{fill:#fff;stroke:var(--alter-line);stroke-width:1.2}
+.alter .a-sclera-shade{fill:#c6dbe9}
+.alter .a-iris{transform:translate(calc(var(--px,0)*1px),calc(var(--py,0)*1px));transition:transform .12s ease-out}
+.alter .a-hl{fill:#fff}
+.alter .a-line,.alter .a-lash,.alter .a-lid-low,.alter .a-closed{fill:none;stroke:var(--alter-line);stroke-linecap:round;stroke-linejoin:round}
+.alter .a-line{stroke-width:2.8}
+.alter .a-lash{stroke-width:4.2}
+.alter .a-lid-low{stroke-width:1.6;opacity:.75}
+.alter .a-closed{stroke-width:4}
+.alter .a-blush{fill:none;stroke:var(--alter-blush);stroke-width:1.9;stroke-linecap:round}
+.alter .a-sign-out{fill:none;stroke:var(--alter-line);stroke-width:8.5;stroke-linecap:round;stroke-linejoin:round}
+.alter .a-sign-in{fill:none;stroke:#fff;stroke-width:4.4;stroke-linecap:round;stroke-linejoin:round}
+.alter .a-moon{fill:var(--alter-moon);stroke:var(--alter-line);stroke-width:2}
+.alter .a-spark{fill:var(--alter-spark)}
+.alter .a-shadow{fill:#000;opacity:.13}
+.alter .a-extra{font:800 22px/1 system-ui,sans-serif;fill:var(--alter-ring)}
+/* parts that only show in some states */
+.alter .a-chev,.alter .a-closed,.alter .a-mouth-open,.alter .a-mouth-slash,.alter .a-mouth-flat,.alter .a-mouth-wavy,.alter .a-blush,.alter .a-q,.alter .a-zz,.alter .a-moons{display:none}
+
+.alter.is-happy .a-open,.alter.is-sleeping .a-open,.alter.is-happy .a-brow{display:none}
+.alter.is-happy .a-chev,.alter.is-happy .a-blush,.alter.is-happy .a-mouth-slash{display:block}
+.alter.is-happy .a-mouth-smile,.alter.is-speaking .a-mouth-smile,.alter.is-unsure .a-mouth-smile,.alter.is-sleeping .a-mouth-smile,.alter.is-thinking .a-mouth-smile{display:none}
+.alter.is-speaking .a-mouth-open{display:block}
+.alter.is-unsure .a-mouth-wavy,.alter.is-unsure .a-q{display:block}
+.alter.is-thinking .a-mouth-flat,.alter.is-thinking .a-moons{display:block}
+.alter.is-sleeping .a-closed,.alter.is-sleeping .a-mouth-flat,.alter.is-sleeping .a-zz{display:block}
+.alter.is-thinking .a-iris{transform:translate(-2.2px,-3px)}
+.alter.is-unsure .a-iris{transform:translate(2.6px,-1px)}
+.alter.is-listening .a-eye{transform:scale(1.1)}
+.alter.is-listening .a-brow{transform:translateY(-2.6px)}
+.alter.is-unsure .a-brow-r{transform:translateY(-4px) rotate(8deg)}
+.alter.is-sleeping .a-brow{transform:translateY(1.6px)}
+.alter .a-eye,.alter .a-brow{transition:transform .2s ease}
+
+@media (prefers-reduced-motion:no-preference){
+  .alter .a-float{animation:a-float 3.6s ease-in-out infinite}
+  .alter .a-shadow{animation:a-shadow 3.6s ease-in-out infinite}
+  .alter .a-open{animation:a-blink 4.8s infinite}
+  .alter .a-eye-r .a-open{animation-delay:.04s}
+  .alter .a-spark{animation:a-twinkle 2.8s ease-in-out infinite;animation-delay:var(--d,0s)}
+  .alter.is-listening .a-tilt{transform:rotate(-5deg);transition:transform .25s ease}
+  .alter.is-unsure .a-tilt{transform:rotate(6deg);transition:transform .25s ease}
+  .alter.is-speaking .a-mouth-open{animation:a-talk .34s ease-in-out infinite}
+  .alter.is-speaking .a-float{animation:a-bob .68s ease-in-out infinite}
+  .alter.is-happy .a-float{animation:a-hop .7s cubic-bezier(.3,.7,.3,1) 2,a-float 3.6s 1.4s ease-in-out infinite}
+  .alter.is-thinking .a-px{animation:a-px 1.9s ease-in-out infinite;animation-delay:var(--d)}
+  .alter.is-sleeping .a-float{animation-duration:6s}
+  .alter.is-sleeping .a-zz{animation:a-zz 2.6s ease-in-out infinite}
+  .alter.is-unsure .a-q{animation:a-pop .4s cubic-bezier(.3,1.6,.5,1) both}
+  @keyframes a-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+  @keyframes a-shadow{0%,100%{transform:scaleX(1);opacity:.13}50%{transform:scaleX(.9);opacity:.09}}
+  @keyframes a-blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+  @keyframes a-twinkle{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.55);opacity:.5}}
+  @keyframes a-talk{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1.15)}}
+  @keyframes a-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2.5px)}}
+  @keyframes a-hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-14px)}}
+  @keyframes a-px{0%,100%{transform:translate(0,0);opacity:var(--o,1)}50%{transform:translate(calc(var(--dx)*1px),calc(var(--dy)*1px));opacity:.5}}
+  @keyframes a-zz{0%{transform:translate(0,4px);opacity:0}40%{opacity:1}100%{transform:translate(6px,-8px);opacity:0}}
+  @keyframes a-pop{from{transform:scale(.2);opacity:0}to{transform:scale(1);opacity:1}}
+}
+@media (prefers-reduced-motion:reduce){ .alter .a-moons{display:none!important} }

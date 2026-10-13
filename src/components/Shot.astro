@@ -1,0 +1,23 @@
+---
+/* One screenshot or video, inside a browser frame, a phone frame, or no frame.
+   Its size comes from the CSS variable --shot-h set by whatever contains it. */
+import type { Media } from "../data/projects";
+import { tr, type Lang } from "../i18n";
+interface Props { media: Media; lang: Lang; label?: string; eager?: boolean }
+const { media, lang, label = "", eager = false } = Astro.props;
+const ar = (media.w / media.h).toFixed(4);
+const alt = tr(media.alt, lang);
+---
+<figure class={`shot shot--${media.frame}`} style={`--ar:${ar};--natural:${media.w}px`}>
+  {media.frame === "browser" && (
+    <div class="fr-bar" aria-hidden="true"><span class="fr-url">{label}</span></div>
+  )}
+  {media.kind === "video" ? (
+    <video class="shot-media" muted loop playsinline preload="none" poster={media.poster} width={media.w} height={media.h} aria-label={alt} data-autoplay>
+      <source src={media.webm} type="video/webm" />
+      <source src={media.mp4} type="video/mp4" />
+    </video>
+  ) : (
+    <img class="shot-media" src={media.src} alt={alt} width={media.w} height={media.h} loading={eager ? "eager" : "lazy"} decoding="async" />
+  )}
+</figure>

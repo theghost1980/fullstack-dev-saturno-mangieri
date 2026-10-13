@@ -1,0 +1,28 @@
+---
+import { tr, type Lang } from "../i18n";
+import { useUI } from "../i18n/ui";
+import { partners } from "../data/partners";
+import ExtIcon from "./ExtIcon.astro";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = useUI(lang);
+---
+{partners.length > 0 && (
+  <section class="sec" id="partners">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>{ui.partners.title}</h2>
+        <p>{ui.partners.lead}</p>
+      </div>
+      <ul class="partners">
+        {partners.map((p) => (
+          <li class="partner">
+            <p class="partner-rel">{tr(p.relation, lang)}</p>
+            <h3 class="partner-name"><a href={p.url} target="_blank" rel="noopener">{p.name}<ExtIcon /><span class="sr"> {ui.work.opens}</span></a></h3>
+            <p class="partner-text">{tr(p.text, lang)}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}

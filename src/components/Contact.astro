@@ -1,0 +1,28 @@
+---
+import { type Lang } from "../i18n";
+import { useUI } from "../i18n/ui";
+import { site, bookAttrs } from "../data/site";
+import ExtIcon from "./ExtIcon.astro";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = useUI(lang);
+const links = [
+  { label: ui.contact.linkedin, url: site.linkedin },
+  { label: ui.contact.github, url: site.github },
+].filter((l) => l.url);
+---
+<section class="sec sec--contact" id="contact">
+  <div class="wrap contact">
+    <h2>{ui.contact.title}</h2>
+    <p class="contact-lead">{ui.contact.lead}</p>
+    <div class="contact-box">
+      <a class="mail" href={`mailto:${site.email}`}>{site.email}</a>
+      <a class="btn btn-primary" {...bookAttrs}>{ui.cta.book}</a>
+    </div>
+    {links.length > 0 && (
+      <ul class="social">
+        {links.map((l) => <li><a href={l.url} target="_blank" rel="noopener me">{l.label}<ExtIcon /><span class="sr"> {ui.work.opens}</span></a></li>)}
+      </ul>
+    )}
+  </div>
+</section>

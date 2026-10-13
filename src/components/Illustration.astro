@@ -1,0 +1,34 @@
+---
+/* Drawn stand-ins for projects that have no screenshots yet. Always labelled. */
+import type { Lang } from "../i18n";
+import { useUI } from "../i18n/ui";
+interface Props { name: "aegispad"; frame: "browser" | "phone"; lang: Lang; title: string; label?: string }
+const { name, frame, lang, title, label = "" } = Astro.props;
+const ui = useUI(lang);
+const ar = frame === "phone" ? "0.4865" : "1.6";
+---
+<figure class={`shot shot--${frame} shot--illus`} style={`--ar:${ar}`} role="img" aria-label={`${ui.work.illustration}: ${title}`}>
+  {frame === "browser" && <div class="fr-bar" aria-hidden="true"><span class="fr-url">{label}</span></div>}
+  <div class="screen">
+    {name === "aegispad" && (
+      <div class="il il-ap" aria-hidden="true">
+        <div class="ap-bar"><b>AegisPad</b><span>Home</span><span class="on">Editor</span><span>FAQ</span></div>
+        <div class="ap-main">
+          <div class="ap-doc">
+            <p class="ap-h"># Draft</p>
+            <i style="width:92%"></i><i style="width:78%"></i>
+            <p class="ap-mark">Smart Revision<small>1 suggestion</small></p>
+            <i style="width:86%"></i><i style="width:64%"></i><i style="width:88%"></i><i style="width:41%"></i>
+          </div>
+          <div class="ap-side">
+            <p class="on">Smart Revision</p>
+            <p>Global Translation</p>
+            <p>Voice Commands</p>
+            <div class="ap-mic"><u></u><s></s><s></s><s></s><s></s><s></s><s></s><s></s></div>
+          </div>
+        </div>
+      </div>
+    )}
+    <span class="il-tag">{ui.work.illustration}</span>
+  </div>
+</figure>

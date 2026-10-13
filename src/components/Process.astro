@@ -1,0 +1,20 @@
+---
+import { type Lang } from "../i18n";
+import { useUI } from "../i18n/ui";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = useUI(lang);
+---
+<section class="sec" id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>{ui.how.title}</h2>
+      <p>{ui.how.lead}</p>
+    </div>
+    <ol class="steps">
+      {ui.how.steps.map((s, i) => (
+        <li class="step"><span class="step-n" aria-hidden="true">{i + 1}</span><h3 class="step-t">{s.title}</h3><p class="step-p">{s.text}</p></li>
+      ))}
+    </ol>
+  </div>
+</section>

@@ -1,0 +1,19 @@
+---
+import { type Lang } from "../i18n";
+import { useUI } from "../i18n/ui";
+import { site } from "../data/site";
+import Logo from "./Logo.astro";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = useUI(lang);
+---
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span class="brand brand--foot"><Logo long /></span>
+    <span>{ui.footer.line}</span>
+    {site.calReferral && (
+      <a class="foot-ref" href={site.calReferral} target="_blank" rel="sponsored noopener">{ui.footer.scheduling} ({ui.footer.referral})<span class="sr"> {ui.work.opens}</span></a>
+    )}
+    <span>&copy; {new Date().getFullYear()} {ui.footer.rights}</span>
+  </div>
+</footer>

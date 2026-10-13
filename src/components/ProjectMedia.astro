@@ -1,0 +1,44 @@
+---
+/* The picture area of a project: one view at a time, with thumbnails when there are several. */
+import type { Project } from "../data/projects";
+import { tr, type Lang } from "../i18n";
+import { useUI } from "../i18n/ui";
+import Shot from "./Shot.astro";
+import Illustration from "./Illustration.astro";
+interface Props { project: Project; lang: Lang }
+const { project, lang } = Astro.props;
+const ui = useUI(lang);
+const host = (() => { try { return new URL(project.liveUrl).host; } catch { return project.name; } })();
+const views = project.media;
+---
+<div class="gallery" data-gallery>
+  <div class="gallery-stage">
+    {views.map((m, i) => (
+      <div class="gallery-view" data-view hidden={i > 0}>
+        <Shot media={m} lang={lang} label={host} />
+        {(m.caption || (m.kind === "image" && m.zoom)) && (
+          <p class="gallery-cap">
+            {tr(m.caption, lang)}
+            {m.kind === "image" && m.zoom && (
+              <a href={m.src} target="_blank" rel="noopener">{ui.cta.zoom}<span class="sr"> {ui.work.opens}</span></a>
+            )}
+          </p>
+        )}
+      </div>
+    ))}
+    {views.length === 0 && project.illustration && (
+      <div class="gallery-view">
+        <Illustration name={project.illustration} frame={project.illustrationFrame ?? "browser"} lang={lang} title={project.name} label={host} />
+      </div>
+    )}
+  </div>
+  {views.length > 1 && (
+    <div class="thumbs" role="group" aria-label={`${ui.work.gallery}: ${project.name}`}>
+      {views.map((m, i) => (
+        <button type="button" class={`thumb${m.kind === "video" ? " thumb--video" : ""}`} data-thumb={i} aria-pressed={i === 0 ? "true" : "false"} aria-label={tr(m.alt, lang)}>
+          <img src={m.kind === "video" ? m.poster : m.thumb} alt="" loading="lazy" decoding="async" />
+        </button>
+      ))}
+    </div>
+  )}
+</div>

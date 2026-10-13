@@ -1,0 +1,17 @@
+---
+/* The </> badge with the name and title line. `long` shows the full title line (used in the footer). */
+import { site } from "../data/site";
+interface Props { long?: boolean }
+const { long = false } = Astro.props;
+const words = site.name.split(" ");
+---
+<svg class="logo-badge" viewBox="0 0 110 110" aria-hidden="true">
+  <rect class="logo-box" x="1" y="1" width="108" height="108" rx="26"></rect>
+  <path class="logo-lt" d="M40 38 23 55 40 72"></path>
+  <path class="logo-slash" d="M45 80 65 30"></path>
+  <path class="logo-gt" d="M70 38 87 55 70 72"></path>
+</svg>
+<span class="logo-text">
+  <span class="logo-name">{words.map((w) => <span>{w} </span>)}</span>
+  <span class="logo-sub">{long ? site.roleLong : site.role}</span>
+</span>

@@ -1,0 +1,16 @@
+# Netlify build settings. The site is static; the only server code is netlify/functions/alter.mjs.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Local development with the function:  npx netlify dev   (serves on http://localhost:8888)
+[dev]
+  command = "npm run dev"
+  targetPort = 4321

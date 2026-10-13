@@ -1,0 +1,66 @@
+---
+/* Alter: the character and its chat panel. One per page, placed at the end of <body>.
+   - The drawing comes from src/lib/alter-svg.js, its look from src/styles/alter-character.css.
+   - Texts and ready-made answers are in src/data/alter.ts.
+   - Behaviour is in src/scripts/alter.js. Without JavaScript nothing is shown. */
+import "../styles/alter-character.css";
+import "../styles/alter-widget.css";
+import { tr, type Lang } from "../i18n";
+import { alter } from "../data/alter";
+import { site, bookAttrs } from "../data/site";
+import { projects } from "../data/projects";
+import { alterSVG } from "../lib/alter-svg.js";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const s = alter.strings;
+const t = (v: Parameters<typeof tr>[0]) => tr(v, lang);
+
+/* Everything the browser script needs, already in the page's language. */
+const config = {
+  lang,
+  endpoint: "/api/alter",
+  book: bookAttrs,                  // the same link and attributes as every "Book a call" button
+  email: site.email,
+  maxQuestions: alter.maxQuestionsPerSession,
+  maxLength: alter.maxQuestionLength,
+  projects: projects.map((p) => ({ slug: p.slug, name: p.name })),
+  strings: {
+    greeting: t(s.greeting), you: t(s.you), thinking: t(s.thinking), limit: t(s.limit), error: t(s.error), offline: t(s.offline),
+    actions: { show_project: t(s.actions.show_project), goto: t(s.actions.goto), book_call: t(s.actions.book_call), email: t(s.actions.email) },
+  },
+  suggestions: alter.suggestions.map((q) => ({ id: q.id, question: t(q.question), answer: t(q.answer), mood: q.mood, action: q.action ?? null })),
+};
+---
+<div class="alter-dock" data-alter data-state="idle">
+  <button class="alter-toggle" type="button" aria-expanded="false" aria-controls="alter-panel">
+    <span class="alter-hint" data-alter-hint>{t(s.hint)}</span>
+    <span class="alter-figure" set:html={alterSVG({ uid: "alter" })} />
+    <span class="sr">{t(s.open)}</span>
+  </button>
+
+  <section class="alter-panel" id="alter-panel" role="dialog" aria-label={`${alter.name}, ${t(s.role)}`} tabindex="-1" hidden>
+    <header class="alter-head">
+      <p><strong>{alter.name}</strong><span>{t(s.role)}</span></p>
+      <button class="alter-close" type="button" data-alter-close aria-label={t(s.close)}>
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M3 3l10 10M13 3 3 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg>
+      </button>
+    </header>
+    <ol class="alter-log" data-alter-log></ol>
+    <div class="alter-live sr" data-alter-live aria-live="polite"></div>
+    <div class="alter-chips" data-alter-chips></div>
+    <form class="alter-form" data-alter-form>
+      <label class="sr" for="alter-input">{t(s.inputLabel)}</label>
+      <input id="alter-input" type="text" autocomplete="off" enterkeyhint="send" maxlength={alter.maxQuestionLength} placeholder={t(s.placeholder)} />
+      <button class="alter-send" type="submit" aria-label={t(s.send)}>
+        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </button>
+    </form>
+    <p class="alter-fine">{t(s.fine)}</p>
+  </section>
+
+  <script type="application/json" data-alter-config set:html={JSON.stringify(config).replace(/</g, "\\u003c")} />
+</div>
+
+<script>
+  import "../scripts/alter.js";
+</script>

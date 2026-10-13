@@ -1,0 +1,34 @@
+---
+import { pathFor, otherLang, type Lang } from "../i18n";
+import { useUI } from "../i18n/ui";
+import { site, bookAttrs } from "../data/site";
+import Logo from "./Logo.astro";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = useUI(lang);
+const other = otherLang(lang);
+---
+<header class="top" id="top">
+  <div class="wrap top-in">
+    <a class="brand" href={pathFor(lang)} aria-label={`${site.name}, ${site.role}`}><Logo /></a>
+    <nav class="nav" id="nav" data-nav aria-label="Main">
+      <a href="#work">{ui.nav.work}</a>
+      <a href="#services">{ui.nav.services}</a>
+      <a href="#experience">{ui.nav.experience}</a>
+      <a href="#partners">{ui.nav.partners}</a>
+      <a href="#contact">{ui.nav.contact}</a>
+      <a class="nav-lang" href={pathFor(other)} hreflang={other} lang={other}>{ui.langSwitch}</a>
+    </nav>
+    <div class="top-act">
+      <a class="icon-btn lang-btn" href={pathFor(other)} hreflang={other} lang={other} aria-label={ui.langSwitch}>{other.toUpperCase()}</a>
+      <button class="icon-btn" type="button" data-theme-toggle data-label-dark={ui.themeToDark} data-label-light={ui.themeToLight} aria-label={ui.themeToDark}>
+        <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><circle cx="10" cy="10" r="7.5" fill="none" stroke="currentColor" stroke-width="1.8"></circle><path d="M10 2.5a7.5 7.5 0 0 1 0 15z" fill="currentColor"></path></svg>
+      </button>
+      <a class="btn btn-primary btn-sm" {...bookAttrs}>{ui.cta.bookShort}</a>
+      <button class="icon-btn menu-btn" type="button" data-menu aria-expanded="false" aria-controls="nav">
+        <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg>
+        <span class="sr">{ui.menu}</span>
+      </button>
+    </div>
+  </div>
+</header>

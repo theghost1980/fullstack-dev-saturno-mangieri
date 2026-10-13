@@ -1,0 +1,16 @@
+---
+import { type Lang } from "../i18n";
+import { useUI } from "../i18n/ui";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = useUI(lang);
+---
+<section class="approach-band" id="approach">
+  <div class="wrap approach">
+    <h2 class="quote">{ui.approach.quote}</h2>
+    <div class="approach-p">
+      <p>{ui.approach.p1}</p>
+      <p>{ui.approach.p2}</p>
+    </div>
+  </div>
+</section>
